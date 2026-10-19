@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腾讯营销服务商准入指引</title>
+    <style>
+:root {
+    --primary: #1E6FFF;
+    --primary-deep: #0B58D6;
+    --primary-light: #E8F1FF;
+    --bg: #FFFFFF;
+    --bg-soft: #F5F7FB;
+    --text: #1F2937;
+    --text-2: #6B7280;
+    --line: #E5E7EB;
+    --orange: #FF7A45;
+    --orange-bg: #FFF3EB;
+    --gray-tag: #D1D5DB;
+    --gray-tag-bg: #F3F4F6;
+    --purple: #8B5CF6;
+    --purple-bg: #F1EBFF;
+    --green: #10B981;
+    --green-bg: #E6F8F1;
+}
+
+* { box-sizing: border-box; }
+html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg-soft);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+.view { min-height: 100vh; }
+.hidden { display: none !important; }
+
+/* ========== 登录 ========== */
+.auth-view {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%);
+}
+.auth-card {
+    width: 420px; background: #fff; border-radius: 16px;
+    padding: 36px 40px; box-shadow: 0 12px 40px rgba(15, 80, 200, 0.08);
+}
+.brand { text-align: center; margin-bottom: 28px; }
+.brand-logo { font-size: 22px; font-weight: 700; color: var(--primary); letter-spacing: 1px; }
+.brand-sub { font-size: 14px; color: var(--text-2); margin-top: 6px; }
+
+.auth-tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.auth-tip {
+    font-size: 12px; line-height: 1.7; color: var(--text-2);
+    background: var(--bg-soft); border: 1px dashed var(--line);
+    border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;
+}
+.auth-tip b { color: var(--primary); }
+
+.auth-guest { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 18px; }
+.guest-btn {
+    width: 100%; padding: 12px 0; background: #fff; color: var(--text-2);
+    border: 1px solid var(--line); border-radius: 10px; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: all .2s;
+}
+.guest-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.guest-tip { margin-top: 10px; margin-bottom: 0; background: transparent; border: none; padding: 0; text-align: center; }
+.auth-tab {
+    flex: 1; text-align: center; padding: 12px 0; cursor: pointer;
+    font-size: 15px; color: var(--text-2); position: relative; transition: all .2s;
+}
+.auth-tab.active { color: var(--primary); font-weight: 600; }
+.auth-tab.active::after {
+    content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
+    width: 32px; height: 3px; border-radius: 2px; background: var(--primary);
+}
+.auth-panel label {
+    display: block; font-size: 13px; color: var(--text-2); margin: 14px 0 6px;
+}
+.auth-panel input {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px;
+    font-size: 14px; outline: none; transition: border .2s;
+}
+.auth-panel input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,111,255,0.12); }
+
+.primary-btn {
+    width: 100%; padding: 13px 0; margin-top: 24px;
+    background: var(--primary); color: #fff; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s;
+}
+.primary-btn:hover { background: var(--primary-deep); }
+.ghost-btn {
+    background: transparent; border: 1px solid var(--line); border-radius: 8px;
+    padding: 7px 14px; font-size: 13px; color: var(--text-2); cursor: pointer; transition: all .2s;
+}
+.ghost-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.msg { margin-top: 12px; font-size: 13px; min-height: 18px; }
+.msg.error { color: #EF4444; }
+.msg.success { color: var(--green); }
+
+/* ========== 主页面 ========== */
+/* 顶部（免登录提示 + 标题栏）整体吸顶 */
+.topbar-wrap { position: sticky; top: 0; z-index: 10; }
+
+/* 免登录提示条 */
+.guest-notice {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--orange-bg); border-bottom: 1px solid var(--orange);
+    padding: 10px 24px; font-size: 13px; line-height: 1.6; color: var(--text);
+}
+.guest-notice-icon { flex: none; font-size: 14px; }
+.guest-notice b { color: var(--orange); }
+
+.topbar {
+    height: 64px; background: #fff; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-brand {
+    background: var(--primary); color: #fff; font-size: 14px; font-weight: 700;
+    padding: 6px 14px; border-radius: 6px;
+}
+.topbar-title { font-size: 16px; color: var(--text); font-weight: 600; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.user-name { font-size: 13px; color: var(--text-2); }
+.user-name::before { content: '👤 '; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 32px 40px 64px; }
+
+/* ===== 导语卡片 ===== */
+.intro-card {
+    background: #fff; border-radius: 16px; margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04);
+    overflow: hidden; position: relative;
+}
+.intro-card::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(180deg, var(--primary), #6FA8FF);
+}
+.intro-head {
+    padding: 20px 28px 18px;
+    background: linear-gradient(120deg, #EAF2FF 0%, #FFFFFF 70%);
+    border-bottom: 1px solid var(--line);
+}
+.intro-head-left { display: flex; align-items: center; gap: 14px; }
+.intro-badge {
+    flex: none; font-size: 12px; font-weight: 700; color: #fff;
+    background: linear-gradient(135deg, #3D8BFF, var(--primary));
+    padding: 4px 12px; border-radius: 20px; letter-spacing: 1px;
+}
+.intro-title { font-size: 19px; font-weight: 700; color: var(--text); letter-spacing: .3px; }
+.intro-lead { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+
+.intro-body { padding: 20px 28px 24px; }
+.intro-para {
+    margin: 0 0 10px; font-size: 14px; line-height: 1.85; color: var(--text);
+}
+.intro-para b { color: var(--primary); }
+
+.intro-points {
+    list-style: none; margin: 16px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.intro-point {
+    display: flex; gap: 12px; padding: 14px 16px;
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.intro-point-no {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+}
+.intro-point-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.intro-point-desc { font-size: 12.5px; line-height: 1.75; color: var(--text-2); }
+.intro-point-desc b { color: var(--primary); }
+
+@media (max-width: 820px) {
+    .intro-points { grid-template-columns: 1fr; }
+}
+
+/* 顶部准入判断：有邀请码吗 */
+.invite-area {
+    background: #fff; border-radius: 16px; padding: 24px 28px;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04); margin-bottom: 20px;
+    position: relative; overflow: hidden;
+}
+.invite-area::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(180deg, var(--orange), #FFB37A);
+}
+.policy-area::before {
+    background: linear-gradient(180deg, var(--primary), #6FA8FF);
+}
+.invite-question { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.invite-q-icon {
+    width: 52px; height: 52px; flex-shrink: 0; border-radius: 14px;
+    background: linear-gradient(135deg, #FF8A4C, var(--orange)); color: #fff;
+    font-size: 26px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(255,122,69,.28);
+}
+.policy-area .invite-q-icon {
+    background: linear-gradient(135deg, #3D8BFF, var(--primary));
+    box-shadow: 0 6px 16px rgba(30,111,255,.28);
+}
+.invite-q-title { font-size: 20px; font-weight: 700; color: var(--text); }
+.invite-q-sub { font-size: 13px; color: var(--text-2); margin-top: 3px; }
+/* 同一区域内多道判断题之间的分隔（加大题与题之间的空隙） */
+.policy-q + .policy-q { margin-top: 60px; padding-top: 44px; border-top: 1px dashed var(--line); }
+.invite-options { display: flex; gap: 16px; }
+.invite-opt {
+    flex: 1; display: flex; align-items: center; gap: 14px;
+    padding: 18px 20px; border-radius: 14px; border: 1.5px solid var(--line);
+    background: #fff; cursor: pointer; text-align: left; transition: all .2s;
+    position: relative; overflow: hidden;
+}
+.invite-opt:hover {
+    border-color: var(--primary); background: var(--primary-light);
+    transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,111,255,.10);
+}
+.invite-opt.chosen {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary-light), #FFFFFF);
+    box-shadow: 0 6px 18px rgba(30,111,255,.14);
+}
+.invite-opt-letter {
+    width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
+    background: var(--primary-light); color: var(--primary); border: 2px solid var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 700;
+    transition: all .2s;
+}
+.invite-opt.chosen .invite-opt-letter { background: var(--primary); color: #fff; }
+.invite-opt-name { font-size: 15.5px; font-weight: 700; color: var(--text); }
+.invite-opt-desc { font-size: 12px; color: var(--text-2); margin-top: 3px; }
+
+/* 选中态右上角勾选标记 */
+.invite-opt-check {
+    position: absolute; top: 10px; right: 10px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary); color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(.5); transition: all .2s;
+}
+.invite-opt.chosen .invite-opt-check { opacity: 1; transform: scale(1); }
+
+/* 政策判断区（精简版：字母 + 名称，不要 desc 干扰） */
+.policy-area .invite-opt {
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 22px;
+    gap: 16px;
+}
+.policy-area .invite-opt-letter {
+    width: 44px; height: 44px;
+    font-size: 20px; font-weight: 700;
+}
+.policy-area .invite-opt-letter.yes {
+    background: var(--green-bg); color: var(--green); border-color: var(--green);
+}
+.policy-area .invite-opt-letter.no {
+    background: var(--gray-tag-bg); color: var(--text-2); border-color: var(--gray-tag);
+}
+.policy-area .invite-opt:hover { border-color: var(--green); background: var(--green-bg); box-shadow: 0 8px 20px rgba(16,185,129,.12); }
+.policy-area .invite-opt:hover .invite-opt-letter.yes { background: var(--green); color: #fff; }
+.policy-area .invite-opt.chosen .invite-opt-letter.yes {
+    background: var(--green); color: #fff; border-color: var(--green);
+}
+.policy-area .invite-opt.chosen .invite-opt-letter.no {
+    background: var(--gray-tag); color: #fff; border-color: var(--gray-tag);
+}
+.policy-area .invite-opt.chosen {
+    border-color: var(--green);
+    background: linear-gradient(135deg, var(--green-bg), #FFFFFF);
+    box-shadow: 0 6px 18px rgba(16,185,129,.14);
+}
+.policy-area .invite-opt.chosen .invite-opt-check { background: var(--green); }
+.policy-area .invite-opt-name {
+    font-size: 15px;
+    line-height: 1.45;
+    flex: 1;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .invite-options { flex-direction: column; }
+}
+
+/* 需要用户回到上方回答政策判断时的高亮提示 */
+.policy-area.attention {
+    animation: attention-pulse 1.5s ease-in-out 3;
+}
+@keyframes attention-pulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(15,30,80,0.04); }
+    50% { box-shadow: 0 0 0 4px rgba(30,111,255,.18), 0 10px 28px rgba(30,111,255,.22); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .policy-area.attention { animation: none; box-shadow: 0 0 0 3px rgba(30,111,255,.25); }
+}
+
+/* ===== 准入流程全景（三阶段泳道） ===== */
+.lanes-card {
+    background: #fff; border-radius: 16px; padding: 24px 28px 28px;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04); margin-bottom: 24px;
+}
+.lanes-head { margin-bottom: 20px; }
+.lanes-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.lanes-sub { font-size: 13px; color: var(--text-2); margin-top: 6px; }
+.lanes-legend {
+    display: flex; flex-wrap: wrap; gap: 18px; font-size: 12.5px; color: var(--text-2); margin-top: 14px;
+}
+.lanes-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; flex: none; }
+.sw-req { background: var(--primary-light); border: 1.5px solid var(--primary); }
+.sw-opt { background: #fff; border: 1.5px dashed var(--gray-tag); }
+.sw-dec { background: var(--orange-bg); border: 1.5px solid var(--orange); border-radius: 4px; }
+
+.lanes { display: flex; align-items: stretch; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+.stage {
+    width: 330px; flex: none; background: #fff;
+    border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04);
+    display: flex; flex-direction: column;
+}
+.stage-head {
+    display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+    background: var(--primary-light); border-bottom: 1px solid var(--line);
+}
+.stage-no {
+    width: 34px; height: 34px; flex: none; border-radius: 10px;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;
+}
+.stage-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+.stage-sub { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+
+.flow { position: relative; padding: 20px 18px 20px 46px; flex: 1; }
+.flow::before {
+    content: ""; position: absolute; left: 22px; top: 14px; bottom: 14px;
+    width: 2px; background: var(--line); border-radius: 2px;
+}
+
+.step { position: relative; margin-bottom: 14px; }
+.step:last-child { margin-bottom: 0; }
+.dot {
+    position: absolute; left: -30px; top: 16px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary); color: #fff; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 3px #fff, 0 2px 6px rgba(30,111,255,.25);
+    z-index: 1;
+}
+.dot.dec {
+    background: var(--orange); border-radius: 50%; width: 22px; height: 22px;
+    left: -30px; top: 16px;
+    box-shadow: 0 0 0 3px #fff, 0 2px 6px rgba(255,122,69,.25);
+}
+.dot.dec::after {
+    content: "?"; width: auto; height: auto; background: none; font-size: 12px; font-weight: 700; color: #fff;
+}
+.dot.opt { background: var(--gray-tag); box-shadow: 0 0 0 3px #fff, 0 2px 6px rgba(100,116,139,.2); }
+.dot.letter { background: var(--primary-light); color: var(--primary); border: 1.5px solid var(--primary); }
+.dot.done { background: var(--green); }
+
+details.card {
+    border-radius: 12px; background: #fff; border: 1px solid var(--line); overflow: hidden;
+    transition: box-shadow .18s, transform .18s, border-color .18s;
+}
+details.card:hover { box-shadow: 0 6px 16px rgba(15,30,80,.08); transform: translateY(-1px); border-color: var(--primary); }
+details.card > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; position: relative;
+}
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after {
+    content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--text-2);
+    border-bottom: 1.5px solid var(--text-2); transform: rotate(-45deg);
+    transition: transform .2s; margin-left: auto; flex: none; opacity: .6;
+}
+details.card[open] > summary::after { transform: rotate(45deg); }
+
+.card.req { border-left: 3px solid var(--primary); }
+.card.req summary { color: var(--text); }
+.card.opt { border-left: 3px solid var(--gray-tag); border-style: solid; border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; border-left-style: solid; }
+.card.opt summary { color: var(--text-2); }
+.card.dec { background: var(--orange-bg); border: 1px solid var(--orange); border-left: 3px solid var(--orange); }
+.card.dec summary { color: var(--text); }
+.card.done { border-color: var(--green); background: #F0FAF5; }
+
+.name { font-size: 14px; font-weight: 600; line-height: 1.45; flex: 1; color: var(--text); }
+.tag { flex: none; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; white-space: nowrap; letter-spacing: .3px; }
+.card.req .tag { background: var(--primary); color: #fff; }
+.card.opt .tag { background: var(--gray-tag-bg); color: var(--text-2); }
+.card.dec .tag { background: var(--orange); color: #fff; }
+.tag-done { background: var(--green); color: #fff; }
+.tag-skipped { background: #F3F4F6; color: #9CA3AF; }
+
+.detail {
+    background: var(--bg-soft); border-top: 1px solid var(--line);
+    padding: 11px 14px; font-size: 12.5px; color: var(--text);
+}
+.detail p { margin: 0 0 5px; }
+.detail p:last-child { margin-bottom: 0; }
+.detail ul, .detail ol { margin: 4px 0 8px 18px; padding-left: 0; }
+.detail li { margin-bottom: 2px; }
+.detail a { color: var(--primary); word-break: break-all; text-decoration: none; border-bottom: 1px dotted var(--primary); }
+.detail a:hover { border-bottom-style: solid; }
+.detail .muted { color: var(--text-2); }
+.lane-badges { display: flex; gap: 6px; margin-top: 8px; }
+
+/* 判断节点展开后的选项（是/否、有/无） */
+.decision-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.decision-opt {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; border-radius: 8px;
+    background: #fff; border: 1px solid var(--line);
+}
+.dopt-label {
+    flex: none; font-size: 12px; font-weight: 700; color: var(--orange);
+    padding: 1px 8px; border-radius: 20px; background: var(--orange-bg);
+}
+.dopt-target { font-size: 12.5px; color: var(--text); }
+
+.branch {
+    margin: 0 0 14px 14px; padding: 6px 0 2px 14px;
+    border-left: 2px solid var(--line); position: relative;
+}
+.branch::before {
+    content: ""; position: absolute; left: -2px; top: 0; width: 12px; height: 2px; background: var(--line);
+}
+.branch .step { margin-bottom: 12px; }
+.branch .step:last-child { margin-bottom: 0; }
+.branch .dot { left: -24px; }
+.edge { display: block; font-size: 12px; font-weight: 700; color: var(--orange); margin: 0 0 5px 2px; letter-spacing: .5px; }
+
+.step.chosen details.card { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary); background: var(--primary-light); }
+.step.skipped { opacity: 0.55; }
+
+/* 与当前开户方式无关的步骤：整体灰掉 */
+.step.dimmed { opacity: 0.45; }
+.step.dimmed details.card {
+    background: var(--gray-tag-bg);
+    border-color: var(--line);
+}
+.step.dimmed details.card:hover { transform: none; box-shadow: none; border-color: var(--line); }
+.step.dimmed .name { color: var(--text-2); }
+.step.dimmed .dot { background: var(--gray-tag); box-shadow: 0 0 0 3px #fff; }
+.step.dimmed .dot.dec { background: var(--gray-tag); }
+.step.dimmed .tag { background: var(--gray-tag); color: #fff; }
+
+.lane-arrow {
+    flex: none; width: 40px; display: flex; align-items: center; justify-content: center; color: var(--primary);
+}
+.lane-arrow svg { animation: lane-slide 1.7s ease-in-out infinite; }
+@keyframes lane-slide {
+    0%, 100% { transform: translateX(0); opacity: .55; }
+    50% { transform: translateX(7px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .lane-arrow svg { animation: none; } }
+
+@media (max-width: 820px) {
+    .stage { width: 300px; }
+}
+
+/* 标签样式 */
+.tag {
+    display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; font-weight: 500; line-height: 20px;
+}
+.tag-required {
+    background: var(--primary); color: #fff;
+}
+.tag-must {
+    background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange);
+}
+.tag-optional {
+    background: var(--gray-tag-bg); color: var(--text-2);
+}
+.tag-recommend {
+    background: var(--green-bg); color: var(--green); border: 1px solid var(--green);
+}
+.card.opt .tag.tag-recommend {
+    background: var(--green-bg); color: var(--green); border-color: var(--green);
+}
+.tag-condition {
+    background: rgba(139,92,246,0.1); color: var(--purple);
+}
+.tag-credit {
+    background: rgba(139,92,246,0.1); color: var(--purple);
+}
+.tag-skip {
+    background: #F3F4F6; color: #9CA3AF; text-decoration: line-through;
+}
+.tag-frame {
+    background: rgba(30,111,255,0.08); color: var(--primary);
+}
+.tag-decision {
+    background: var(--orange-bg); color: var(--orange);
+    padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    letter-spacing: .3px;
+}
+
+/* 摘要 */
+.summary-card {
+    background: #fff; border-radius: 16px; padding: 24px 32px;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04); margin-bottom: 20px;
+}
+.section-head { margin-bottom: 16px; }
+.section-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: var(--primary);
+    background: var(--primary-light); padding: 4px 12px; border-radius: 20px;
+    margin-bottom: 10px; letter-spacing: .3px;
+}
+.summary-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.summary-sub { font-size: 13px; color: var(--text-2); margin-top: 6px; line-height: 1.6; }
+.summary-sub b { color: var(--primary); }
+
+/* 待办/已完成两个 part 的分区头 */
+.summary-part { margin-bottom: 14px; }
+.summary-part:last-child { margin-bottom: 0; }
+.summary-part-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; margin-bottom: 6px;
+    border-bottom: 1px dashed var(--line);
+}
+.summary-part-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.summary-part-count {
+    flex: none; min-width: 24px; height: 22px; padding: 0 9px;
+    background: var(--primary-light); color: var(--primary);
+    border-radius: 12px; font-size: 12px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.summary-part:last-child .summary-part-count {
+    background: var(--green-bg); color: var(--green);
+}
+/* 已完成板块：默认折叠，点击展开 */
+.summary-part-done > summary { list-style: none; cursor: pointer; }
+.summary-part-done > summary::-webkit-details-marker { display: none; }
+.summary-part-done > summary::after {
+    content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--text-2);
+    border-bottom: 1.5px solid var(--text-2); transform: rotate(-45deg);
+    transition: transform .2s; flex: none; opacity: .6;
+}
+.summary-part-done[open] > summary::after { transform: rotate(45deg); }
+.done-part-hint { margin-left: auto; font-size: 12px; color: var(--text-2); }
+.summary-list { margin: 0; padding: 0; list-style: none; }
+.summary-item {
+    border-bottom: 1px solid var(--line); font-size: 14px;
+}
+.summary-item:last-child { border-bottom: none; }
+.summary-num {
+    width: 26px; height: 26px; flex-shrink: 0; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+}
+.summary-item.done .summary-num { background: var(--green); }
+.summary-item.skipped .summary-num { background: var(--gray-tag); color: #fff; }
+.summary-item.optional .summary-num { background: var(--gray-tag); color: #fff; }
+.summary-name { flex: 1; color: var(--text); font-weight: 600; }
+.summary-name.done { color: var(--text-2); text-decoration: line-through; font-weight: 400; }
+.summary-name.skipped { color: var(--text-2); text-decoration: line-through; font-weight: 400; }
+.summary-name.optional { color: var(--text-2); }
+.summary-item.optional .summary-name { font-weight: 400; }
+.summary-status { font-size: 12px; color: var(--text-2); flex: none; }
+
+/* 待办项可展开（details） */
+.summary-details > summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px;
+    padding: 14px 0; position: relative;
+}
+.summary-details > summary::-webkit-details-marker { display: none; }
+.summary-details > summary::after {
+    content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--text-2);
+    border-bottom: 1.5px solid var(--text-2); transform: rotate(-45deg);
+    transition: transform .2s; flex: none; opacity: .6; margin-right: 2px;
+}
+.summary-details[open] > summary::after { transform: rotate(45deg); }
+.summary-detail-body {
+    background: var(--bg-soft); border-radius: 10px;
+    padding: 14px 16px; margin: 0 0 14px 38px;
+    font-size: 13px; color: var(--text);
+}
+.summary-detail-body p { margin: 0 0 6px; }
+.summary-detail-body p:last-child { margin-bottom: 0; }
+.summary-detail-body ul, .summary-detail-body ol { margin: 4px 0 8px 18px; padding-left: 0; }
+.summary-detail-body li { margin-bottom: 2px; }
+.summary-detail-body a { color: var(--primary); word-break: break-all; text-decoration: none; border-bottom: 1px dotted var(--primary); }
+.summary-detail-body a:hover { border-bottom-style: solid; }
+.summary-detail-body .muted { color: var(--text-2); }
+
+/* 当前步骤高亮 */
+.summary-item.current { background: #FFFBEB; border-radius: 10px; padding: 0 12px; }
+.summary-current-badge {
+    flex: none; font-size: 11px; font-weight: 700; color: var(--orange);
+    background: var(--orange-bg); padding: 2px 10px; border-radius: 20px; white-space: nowrap;
+}
+
+/* 待办操作按钮 */
+.summary-actions { display: flex; gap: 10px; margin-top: 12px; }
+.summary-complete-btn {
+    background: var(--primary); color: #fff; border: none; border-radius: 8px;
+    padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+}
+.summary-complete-btn:hover { background: var(--primary-deep); }
+.summary-skip-btn {
+    background: #fff; color: var(--text-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 18px; font-size: 13px; cursor: pointer; transition: all .2s;
+}
+.summary-skip-btn:hover { border-color: var(--gray-tag); background: var(--gray-tag-bg); }
+.summary-reset-btn {
+    background: #fff; color: var(--text-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 18px; font-size: 13px; cursor: pointer; transition: all .2s;
+}
+.summary-reset-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); }
+
+.summary-empty { color: var(--text-2); font-size: 14px; padding: 12px 0; }
+
+/* 下一批未解锁时的引导提示（位于「我的待办」描述下方、待办列表上方） */
+.flow-hint-area { margin: 0 0 16px; }
+.flow-hint-area .summary-lock { margin-top: 0; }
+.summary-lock {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-top: 14px; padding: 14px 18px;
+    background: repeating-linear-gradient(135deg, #F7F9FC, #F7F9FC 8px, #F2F5FA 8px, #F2F5FA 16px);
+    border: 1px dashed var(--gray-tag); border-radius: 12px;
+}
+.summary-lock-icon { flex: none; font-size: 18px; line-height: 1.4; }
+.summary-lock-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.summary-lock-desc { font-size: 12.5px; line-height: 1.7; color: var(--text-2); margin-top: 3px; }
+.summary-lock-desc b { color: var(--primary); }
+
+/* 政策激励确认提示（位于待办板块最上方，非待办事项） */
+.policy-notice-area { margin: 0 0 16px; }
+.policy-notice {
+    border: 1px dashed var(--primary); border-radius: 12px;
+    background: var(--primary-light); padding: 14px 18px;
+}
+.policy-notice.confirmed { border-style: solid; background: #FBFCFE; }
+.policy-notice-head { display: flex; align-items: center; gap: 10px; }
+.policy-notice-icon { font-size: 16px; }
+.policy-notice-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.policy-notice-tag {
+    margin-left: auto; flex: none; font-size: 11.5px; font-weight: 600;
+    color: var(--primary); background: #fff; border: 1px solid var(--primary);
+    border-radius: 20px; padding: 2px 10px;
+}
+.policy-notice-body { margin-top: 8px; font-size: 13px; line-height: 1.8; color: var(--text-2); }
+.policy-notice-body p { margin: 0 0 6px; }
+.policy-notice-cond-title { font-weight: 700; color: var(--text); }
+.policy-notice-cond ol { margin: 4px 0 8px; padding-left: 20px; }
+.policy-notice-emph {
+    margin: 8px 0 0; padding: 9px 12px; border-radius: 8px;
+    border-left: 3px solid var(--primary); background: rgba(30,111,255,.07);
+    color: var(--primary); font-weight: 600;
+}
+.policy-notice-actions { margin-top: 12px; }
+.policy-notice-btn {
+    padding: 11px 24px; font-size: 14px; font-weight: 600;
+    box-shadow: 0 6px 16px rgba(30,111,255,.18); transition: all .2s ease;
+}
+.policy-notice-btn:hover {
+    transform: translateY(-1px); box-shadow: 0 10px 22px rgba(30,111,255,.26);
+}
+
+/* 底部帮助入口 */
+.help-card {
+    background: #fff; border-radius: 16px; padding: 24px 32px;
+    box-shadow: 0 4px 16px rgba(15,30,80,0.04); margin-bottom: 20px;
+}
+.help-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.help-sub { font-size: 13px; color: var(--text-2); margin-top: 6px; line-height: 1.6; }
+.help-links {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px; margin-top: 18px;
+}
+.help-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px;
+    background: #FBFCFE; text-decoration: none; color: inherit;
+    transition: all .2s ease;
+}
+.help-link:hover {
+    border-color: var(--primary); background: var(--primary-light);
+    transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,80,200,.08);
+}
+.help-link-icon { flex: none; font-size: 20px; }
+.help-link-text { min-width: 0; }
+.help-link-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.help-link-desc { font-size: 12.5px; color: var(--text-2); margin-top: 3px; line-height: 1.6; }
+.help-link-arrow { margin-left: auto; flex: none; color: var(--primary); font-weight: 700; }
+.help-link-cred {
+    display: flex; flex-wrap: wrap; gap: 6px 16px;
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line);
+}
+.cred-item {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--text-2); line-height: 1.6;
+}
+.cred-item code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px; color: var(--text);
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 4px; padding: 1px 6px;
+    user-select: all; -webkit-user-select: all;
+}
+
+/* 待办 vs 全景的分界说明 */
+.view-divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 8px 0 20px; padding: 0 4px;
+}
+.view-divider-line { flex: 1; height: 1px; background: var(--line); }
+.view-divider-text {
+    flex: none; font-size: 12.5px; color: var(--text-2);
+    background: var(--bg-soft); padding: 6px 16px; border-radius: 20px;
+    border: 1px dashed var(--line); letter-spacing: .3px;
+}
+
+/* 详情弹窗 */
+.modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; }
+.modal-mask { position: absolute; inset: 0; background: rgba(15,30,80,0.4); backdrop-filter: blur(2px); }
+.modal-body {
+    position: relative; background: #fff; border-radius: 16px; width: 640px; max-width: 92vw;
+    max-height: 86vh; display: flex; flex-direction: column; overflow: hidden;
+    animation: pop .2s ease-out;
+}
+@keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    padding: 22px 28px 16px; border-bottom: 1px solid var(--line);
+}
+.detail-title { font-size: 18px; font-weight: 700; color: var(--text); }
+.detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.modal-close {
+    font-size: 24px; color: var(--text-2); cursor: pointer; line-height: 1;
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; transition: all .2s;
+}
+.modal-close:hover { background: var(--bg-soft); color: var(--text); }
+.detail-content { padding: 20px 28px; overflow-y: auto; }
+.detail-content h4 {
+    font-size: 14px; color: var(--primary); font-weight: 700; margin: 16px 0 8px;
+}
+.detail-content h4:first-child { margin-top: 0; }
+.detail-content p, .detail-content li {
+    font-size: 14px; line-height: 1.8; color: var(--text); margin: 6px 0;
+}
+.detail-content ul { padding-left: 20px; }
+.detail-content a { color: var(--primary); text-decoration: none; }
+.detail-content a:hover { text-decoration: underline; }
+.detail-content .callout {
+    background: var(--primary-light); border-left: 3px solid var(--primary);
+    padding: 10px 14px; border-radius: 6px; font-size: 13px; margin: 12px 0;
+}
+.detail-content .warn {
+    background: var(--orange-bg); border-left: 3px solid var(--orange);
+    padding: 10px 14px; border-radius: 6px; font-size: 13px; margin: 12px 0;
+}
+.detail-content .warn strong { color: var(--orange); }
+.detail-content .email-box {
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.9;
+}
+.detail-content .email-box div { margin: 2px 0; }
+.detail-content .email-box strong { color: var(--text); }
+
+.modal-footer {
+    padding: 14px 28px; border-top: 1px solid var(--line);
+    display: flex; justify-content: flex-end; gap: 12px; background: var(--bg-soft);
+}
+.modal-footer .primary-btn {
+    width: auto; padding: 10px 28px; margin-top: 0;
+}
+
+/* 判断选择弹窗 */
+.modal-body-narrow { width: 480px; }
+.decision-choices { padding: 4px 28px 24px; display: flex; flex-direction: column; gap: 10px; }
+.decision-choice-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    padding: 14px 16px; border-radius: 12px;
+    background: #fff; border: 1.5px solid var(--line);
+    text-align: left; cursor: pointer; font-size: 14px;
+    transition: all .15s;
+}
+.decision-choice-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+.decision-choice-btn.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 2px rgba(30,111,255,0.15); }
+.decision-choice-btn .dopt-label { flex: none; }
+.decision-choice-btn .dopt-target { color: var(--text); font-weight: 600; }
+
+/* 小屏幕适配 */
+@media (max-width: 768px) {
+    .container { padding: 20px 16px; }
+    .topbar { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+    <!-- 主页面（免登录，直接进入） -->
+    <div id="app-view" class="view">
+        <div class="topbar-wrap">
+            <!-- 顶部提示：免登录模式，进度不保存 -->
+            <div class="guest-notice">
+                <span class="guest-notice-icon">⚠️</span>
+                <span>勾选进度仅保存在当前页面，<b>关闭或刷新页面后进度会被清空</b>，不会上传或同步到任何系统。</span>
+            </div>
+
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-brand">腾讯营销</div>
+                    <div class="topbar-title">服务商准入指引助手</div>
+                </div>
+                <div class="topbar-right">
+                    <button id="btn-reset" class="ghost-btn">重置进度</button>
+                </div>
+            </header>
+        </div>
+
+        <main class="container">
+            <!-- 导语：背景说明与工具导航 -->
+            <section class="intro-card">
+                <div class="intro-head">
+                    <div class="intro-head-left">
+                        <span class="intro-badge">导语</span>
+                        <div>
+                            <div class="intro-title">欢迎加入腾讯营销服务商生态</div>
+                            <div class="intro-lead">K1 竞价自助开放生态 · 准入办理与政策激励指引</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-body">
+                    <p class="intro-para">
+                        腾讯营销 K1 竞价现已全面升级为<b>自助开放生态</b>，我们诚挚欢迎各位广告代理商入驻腾讯生态，依托腾讯营销平台开展业务经营与商业合作。
+                    </p>
+                    <p class="intro-para">
+                        为帮助您高效、顺畅地完成准入并开展经营活动，本工具围绕以下四个维度提供全流程指引：
+                    </p>
+                    <ul class="intro-points">
+                        <li class="intro-point">
+                            <span class="intro-point-no">1</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">开户流程全景</div>
+                                <div class="intro-point-desc">按「准入前 — 准入期 — 准入后」三阶段拆解完整开户链路，逐项列明各环节的操作要求、所需材料与办理入口。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">2</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">季度消耗与政策对照</div>
+                                <div class="intro-point-desc">明确季度全量消耗所对应的政策激励标准，帮助您提前规划经营节奏与业务目标，合理安排投放与结算安排。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">3</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">政策激励申请通道</div>
+                                <div class="intro-point-desc">当季 K1 竞价全量消耗达到 <b>10 万元门槛</b>后，即可开启政策激励申请，完成集团累量、合同签署、授信等流程，获得平台返点与流量支持。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">4</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">分阶段模块导航</div>
+                                <div class="intro-point-desc">系统将依据您的开户方式与当前所处阶段，自动聚焦对应模块并生成专属待办清单，无需在冗长流程中自行定位。</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 顶部准入判断：有邀请码吗 -->
+            <section id="invite-area" class="invite-area"></section>
+
+            <!-- 顶部判断：最近三个月 100 万 + 当季 K1 竞价全量消耗 10 万（签框代理） -->
+            <section id="policy-area" class="invite-area policy-area"></section>
+
+            <!-- 待办清单：逐步 check 完成（拆为两个 part：待办 + 已完成） -->
+            <section class="summary-card hidden" id="summary-card">
+                <div class="section-head">
+                    <span class="section-badge">① 逐步办理</span>
+                    <div class="summary-title">我的待办</div>
+                    <div class="summary-sub">请按序完成以下实操步骤。每步完成后点击「完成」打勾，后续步骤将逐步解锁。</div>
+                </div>
+
+                <!-- 流程引导提示：位于待办描述下方、具体待办列表上方 -->
+                <div id="flow-hint-area" class="flow-hint-area hidden"></div>
+
+                <!-- 政策激励确认提示：非待办，展示在待办列表最上方 -->
+                <div id="policy-notice-area" class="policy-notice-area hidden"></div>
+
+                <!-- Part 1：待办 -->
+                <div class="summary-part">
+                    <div class="summary-part-head">
+                        <span class="summary-part-title">📌 待办</span>
+                        <span class="summary-part-count" id="summary-todo-count">0</span>
+                    </div>
+                    <ul id="summary-list-todo" class="summary-list"></ul>
+                </div>
+
+                <!-- Part 2：已完成（默认折叠，点击可展开） -->
+                <details class="summary-part summary-part-done" id="done-part">
+                    <summary class="summary-part-head">
+                        <span class="summary-part-title">✅ 已完成</span>
+                        <span class="summary-part-count" id="summary-done-count">0</span>
+                        <span class="done-part-hint">点击展开 / 收起</span>
+                    </summary>
+                    <ul id="summary-list-done" class="summary-list"></ul>
+                </details>
+            </section>
+
+            <!-- 流程全景视图已隐藏（改为分批引导式待办） -->
+            <div class="view-divider hidden">
+                <span class="view-divider-line"></span>
+                <span class="view-divider-text">上面是「逐项办理」清单，下面是同一套流程的「整体全景」视图</span>
+                <span class="view-divider-line"></span>
+            </div>
+
+            <section class="lanes-card hidden">
+                <div class="lanes-head">
+                    <span class="section-badge">② 流程全景</span>
+                    <div class="lanes-title">准入流程全景</div>
+                    <div class="lanes-sub">和上面待办是<b>同一套流程</b>，这里从整体视角看每个步骤的全貌；点击节点可展开原文说明与链接。</div>
+                    <div class="lanes-legend" id="lanes-legend"></div>
+                </div>
+                <div id="lanes-area" class="lanes"></div>
+            </section>
+
+            <!-- 底部帮助入口：有问题可上妙问提问或到自建知识库查询 -->
+            <section class="help-card">
+                <div class="section-head">
+                    <span class="section-badge">② 帮助与支持</span>
+                    <div class="help-title">还有其他问题？</div>
+                    <div class="help-sub">若本指引未能覆盖您的疑问，可通过以下渠道进行咨询或查阅相关资料。</div>
+                </div>
+                <div class="help-links">
+                    <a class="help-link" href="https://miaowen.qq.com/" target="_blank" rel="noopener">
+                        <span class="help-link-icon">💬</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">妙问</div>
+                            <div class="help-link-desc">智能问答助手，直接提问即可获取答案</div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                    <a class="help-link" href="https://csig.lexiangla.com/spaces/5365255fd79044be9d61c3ba6b898c69?company_from=csig&amp;use_default_login=1" target="_blank" rel="noopener">
+                        <span class="help-link-icon">📚</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">知识库</div>
+                            <div class="help-link-desc">查询准入与服务商管理相关的完整资料文档</div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                    <a class="help-link" href="https://relay.zhixiao.qq.com/butler/" target="_blank" rel="noopener">
+                        <span class="help-link-icon">🗂️</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">一站式平台</div>
+                            <div class="help-link-desc">行业信息综合查询平台，支持行业政策、市场动态及相关业务资料的一站式检索。</div>
+                            <div class="help-link-cred">
+                                <span class="cred-item">登录账号 <code>K1-visitor</code></span>
+                                <span class="cred-item">登录密码 <code>Tencent@K1visitor</code></span>
+                            </div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- 详情弹窗 -->
+        <div id="detail-modal" class="modal hidden">
+            <div class="modal-mask"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <div id="detail-title" class="detail-title"></div>
+                        <div id="detail-tags" class="detail-tags"></div>
+                    </div>
+                    <div class="modal-close" id="detail-close">×</div>
+                </div>
+                <div id="detail-content" class="detail-content"></div>
+                <div class="modal-footer">
+                    <button id="btn-skip-step" class="ghost-btn hidden">标记为无需操作</button>
+                    <button id="btn-complete-step" class="primary-btn">已完成</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 判断选择弹窗 -->
+        <div id="decision-modal" class="modal hidden">
+            <div class="modal-mask"></div>
+            <div class="modal-body modal-body-narrow">
+                <div class="modal-header">
+                    <div>
+                        <div id="decision-title" class="detail-title"></div>
+                        <div class="detail-tags">
+                            <span class="tag-decision">判断 / 选择</span>
+                        </div>
+                    </div>
+                    <div class="modal-close" id="decision-close">×</div>
+                </div>
+                <div id="decision-prompt" class="detail-content"></div>
+                <div id="decision-choices" class="decision-choices"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// K1新代理准入流程数据 - 严格按最新版流程图整理
+// tag 类型: required(必选)、must(必读)、optional(非必选)、decision(判断)、credit(条件严格)、condition(消耗≥50万)、frame(签框/非框)
+
+const FLOW = {
+    phases: [
+        {
+            id: 1, name: '准入前', desc: '开户准备', key: 'phase1',
+            intro: '在正式合作前，您需要先完成服务商账户的开户、对公验证和保证金缴纳。'
+        },
+        {
+            id: 2, name: '准入期', desc: '资质与合同', key: 'phase2',
+            intro: '完成开户后，您需要按需申请政策激励，完成合同签署并归档。'
+        },
+        {
+            id: 3, name: '准入后', desc: '基础功能与规范', key: 'phase3',
+            intro: '完成实名认证、基础功能开通、服务商管理规范必读，并按需申请合作证明、授信等。'
+        }
+    ],
+
+    // 步骤定义
+    steps: {
+        // ========= 阶段1 准入前 =========
+        s1_decision_invite: {
+            id: 's1_decision_invite', phase: 1, type: 'decision',
+            name: '有邀请码吗？',
+            tag: 'decision', order: 0,
+            summary: '根据是否有邀请码，选择不同的开户方式。',
+            branches: [
+                { label: '有 →', target: 's1_frame', label2: '（a）签框开户' },
+                { label: '无 →', target: 's1_nonframe', label2: '（b）非框开户' }
+            ]
+        },
+        s1_frame: {
+            id: 's1_frame', phase: 1, indent: 1, branch: true,
+            name: '签框开户', letter: 'a',
+            tag: 'required',
+            summary: '填写邀请码，补充开户资质，挂接人户。',
+            detail: {
+                purpose: '通过邀请码挂接至指定渠道经理，享受一对一服务。',
+                actions: [
+                    '登录服务商系统，选择【签框开户】',
+                    '填写您收到的邀请码（请联系对应渠道经理获取）',
+                    '补充公司开户资质（营业执照、商标/品牌授权、行业资质等）',
+                    '挂接到对应的人户（渠道经理）'
+                ],
+                materials: ['营业执照', '法人身份证', '商标注册证或品牌授权链路', '邀请码'],
+                contact: '请联系您的对接渠道经理获取邀请码并协助挂接'
+            }
+        },
+        s1_nonframe: {
+            id: 's1_nonframe', phase: 1, indent: 1, branch: true,
+            name: '非框开户', letter: 'b',
+            tag: 'required',
+            summary: '选择非框，补充开户资质。',
+            detail: {
+                purpose: '无邀请码时的开户通道，自主选择非框开户。',
+                actions: [
+                    '登录服务商系统，选择【非框开户】',
+                    '补充公司开户资质（营业执照、商标/品牌授权、行业资质等）'
+                ],
+                materials: ['营业执照', '法人身份证', '商标注册证或品牌授权链路']
+            }
+        },
+        s1_1: {
+            id: 's1_1', phase: 1,
+            name: '开通服务商端口',
+            tag: 'required', order: 1,
+            summary: '注册并开通腾讯营销服务商账户。',
+            detail: {
+                purpose: '在腾讯营销服务商系统建立您公司的服务商账户，是后续所有操作的前提。',
+                actions: [
+                    '开户链接：<a href="https://e.qq.com/new-agency-reg" target="_blank">https://e.qq.com/new-agency-reg</a>',
+                    '开户相关 Q&A：<a href="https://support.e.qq.com/detail?cid=5149&pid=13039" target="_blank">https://support.e.qq.com/detail?cid=5149&pid=13039</a>'
+                ],
+                materials: ['营业执照（原件扫描件）', '法人身份证正反面', '对公账户信息', '办公地址证明'],
+                tips: '请保管好您的账户密码，建议绑定手机号用于安全验证。'
+            }
+        },
+        s1_2: {
+            id: 's1_2', phase: 1, name: '完成对公验证', tag: 'required', order: 2,
+            summary: '通过服务商系统完成对公账户验证。',
+            detail: {
+                purpose: '首次注册并登录服务商系统后，务必完成对公验证，确保资金往来合规。',
+                actions: [
+                    '操作指引：<a href="https://bbx-pic.gtimg.com/bbx/pictures/2026/382_20260602174258_802141.pdf" target="_blank">https://bbx-pic.gtimg.com/bbx/pictures/2026/382_20260602174258_802141.pdf</a>'
+                ]
+            }
+        },
+        s1_3: {
+            id: 's1_3', phase: 1, name: '缴纳准入保证金 ¥10 万', tag: 'required', order: 3,
+            summary: '向腾讯营销缴纳准入保证金 10 万元人民币。',
+            detail: {
+                purpose: '准入保证金是合作的基础门槛，仅用于风控担保。',
+                actions: [
+                    '操作链接：<a href="https://e.qq.com/agency/reg?cid=4426&pid=12396" target="_blank">https://e.qq.com/agency/reg?cid=4426&pid=12396</a>'
+                ],
+                materials: ['对公账户信息', '保证金缴纳凭证'],
+                callout: '完成开户、对公验证、保证金缴纳后方可正常使用服务商系统功能。',
+                tips: '请关注保证金退还机制及合作终止时的退还流程。'
+            }
+        },
+
+        // ========= 阶段2 准入期 =========
+        // 前置判断：最近三个月 K1 竞价全量消耗是否达到 100 万（未达到则无需再判断当季门槛）
+        s2_decision_recent: {
+            id: 's2_decision_recent', phase: 2, type: 'decision',
+            name: '最近三个月 K1 竞价全量消耗是否达到 100 万？',
+            tag: 'decision', order: 0,
+            summary: '先识别最近三个月 K1 竞价全量消耗是否达到 100 万，未达到则无需再判断当季门槛。',
+            branches: [
+                { label: '是 →', target: 's2_recent_yes', label2: '继续判断当季 K1 竞价全量消耗' },
+                { label: '否 →', target: 's2_recent_no', label2: '无政策，直接进入准入后步骤' }
+            ],
+            detail: {
+                purpose: '「最近三个月」指从今天往前推三个月的区间，例如今天是 2026年8月8日，则统计区间为 2026年5月8日—2026年8月8日。'
+            }
+        },
+        s2_decision_spend: {
+            id: 's2_decision_spend', phase: 2, type: 'decision',
+            name: '当季 K1 竞价全量消耗 ≥10 万？',
+            tag: 'decision', order: 0,
+            summary: '识别当季 K1 竞价全量消耗是否达到 10 万门槛，以决定是否可申请政策激励。',
+            branches: [
+                { label: '是 →', target: 's2_4', label2: '申请政策激励' },
+                { label: '否 →', target: 's2_4_no', label2: '无政策 / 自主放弃' }
+            ],
+            detail: {
+                purpose: '识别当季 K1 竞价全量消耗是否达到 10 万门槛，以决定是否可申请政策激励。「当季」指当前自然季度起始日至今天，例如今天是 2026年8月8日，则统计区间为 2026年7月1日—2026年8月8日。',
+                actions: [
+                    '服务商自行查看本季度总消耗：服务商系统「投放」→「报表」→「服务商维度」→ 日期范围选择"本季度"，离线下载 → 进入「服务商下载中心」下载具体数据。'
+                ]
+            }
+        },
+        s2_4: {
+            id: 's2_4', phase: 2, indent: 1, branch: true,
+            name: '申请政策激励',
+            tag: 'required', order: 4,
+            summary: '当季 K1 竞价全量消耗 ≥10 万时申请政策激励。',
+            detail: {
+                purpose: '完成季度消耗门槛后获得平台返点与流量支持。',
+                actions: [
+                    '登录服务商系统，进入【政策激励】',
+                    '核对当季消耗数据是否符合条件',
+                    '提交激励申请，系统审核通过后自动生效'
+                ],
+                conditions: [
+                    '当季 K1 竞价全量消耗 ≥10 万',
+                    '当季度完成合同归档',
+                    '有效人户挂接'
+                ],
+                materials: ['当季全量消耗数据截图', '企业基本信息']
+            }
+        },
+        s2_4_no: {
+            id: 's2_4_no', phase: 2, indent: 1, branch: true,
+            name: '无政策 / 自主放弃',
+            tag: 'optional',
+            summary: '未达门槛或自主放弃，无需操作。',
+            detail: {
+                purpose: '未达门槛或自主放弃。',
+                actions: ['本步骤无需操作，跳过即可。']
+            }
+        },
+        s2_supplier: {
+            id: 's2_supplier', phase: 2, name: '供应商入库',
+            tag: 'optional', order: 0,
+            confirmText: '已知',
+            summary: '涉及品牌返点。如需入库：提供相关信息，渠道经理协助提报；否则无需操作。',
+            detail: {
+                purpose: '对接品牌返点需入库备案，确保返点链路完整。',
+                contact: '联系您的渠道经理协助提报'
+            }
+        },
+        s2_5: {
+            id: 's2_5', phase: 2, name: '政策集团累量申请', tag: 'required', order: 5,
+            summary: '请联系渠道经理完成新增政策集团标签设置，并邮件申请配置服务商政策激励主账户。',
+            detail: {
+                actions: [
+                    '1. 请联系渠道经理完成新增政策集团标签设置。集团内多家代理的广告消耗合并计算，便于达到更高政策门槛。',
+                    '2. 完成政策集团申请后，请参照 <a href="https://support.e.qq.com/detail?cid=4080&pid=11017" target="_blank">https://support.e.qq.com/detail?cid=4080&pid=11017</a> 中「申请配置服务商政策激励主账户」的邮件模板，发送邮件申请。今后可在系统内查询相关政策内容。'
+                ]
+            }
+        },
+        s2_6: {
+            id: 's2_6', phase: 2, name: '合同签署', tag: 'required', order: 6,
+            summary: '开通电子签，并完成合同签署及归档。',
+            detail: {
+                actions: [
+                    '请参考电子签署指引 <a href="https://doc.weixin.qq.com/doc/w3_AQAAOAYtAGoCNYG1JJFVOR0autcEZ?scode=AJEAIQdfAAooWj0obcAHcAdAbGACc" target="_blank">点此查看电子签署指引</a> 完成合同签署及归档，确保合作法律效力。'
+                ]
+            }
+        },
+
+        // ========= 阶段3 准入后 =========
+        s3_7: {
+            id: 's3_7', phase: 3, name: '服务商系统基础能力开通', tag: 'required', order: 7,
+            summary: '',
+            detail: {
+                plainActions: true,
+                actions: [
+                    '1. 请仔细阅读服务商系统操作手册，明确各板块功能及作用，确保功能使用正常：<a href="https://docs.qq.com/doc/DRGxRUGZsY3ZMZUNY?nlc=1" target="_blank">https://docs.qq.com/doc/DRGxRUGZsY3ZMZUNY?nlc=1</a>',
+                    '2. 开通成长中心查看E赋能相关。请将以下信息提报给渠道经理，协助提报：服务商政策集团名称、申请人服务商系统 userid、申请人职位',
+                    '* 因产品数据内容包含集团全量数据，建议仅针对管理层开放。'
+                ],
+                alt: {
+                    purpose: '请仔细阅读服务商系统操作手册，明确各板块功能及作用，确保功能使用正常：<a href="https://docs.qq.com/doc/DRGxRUGZsY3ZMZUNY?nlc=1" target="_blank">https://docs.qq.com/doc/DRGxRUGZsY3ZMZUNY?nlc=1</a>'
+                }
+            }
+        },
+        s3_8: {
+            id: 's3_8', phase: 3, name: '基础业务功能开通', tag: 'required', order: 8,
+            summary: '开通成长中心、政策全景看板，查看相对应的政策内容。',
+            detail: {
+                purpose: '开通成长中心、政策全景看板查看相对应的政策内容。请将以下链接中提及的信息提报给渠道经理，协助提报。',
+                actions: [
+                    '1. 成长中心请提供以下信息：服务商政策集团名称、申请人服务商系统 userid、申请人职位',
+                    '* 因产品数据内容包含集团全量数据，建议仅针对管理层开放。',
+                    '2. 政策全景看板：<a href="https://support.e.qq.com/detail?cid=4080&pid=11017" target="_blank">https://support.e.qq.com/detail?cid=4080&pid=11017</a>',
+                    '请参照「申请配置服务商政策激励主账户」的邮件模板，发送邮件进行申请。'
+                ]
+            }
+        },
+        s3_10: {
+            id: 's3_10', phase: 3, name: '合作证明申请', tag: 'condition', order: 9,
+            confirmText: '已知',
+            summary: '',
+            detail: {
+                purpose: '账户有效 + 已缴保证金 + 完成身份验证，且当季度全量消耗 ≥50 万，自动颁发官方合作证明，可用于对外宣传。请联系您的渠道经理/管理组获取。'
+            }
+        },
+        s3_upgrade: {
+            id: 's3_upgrade', phase: 3, name: '升级主体 / 集团管理', tag: 'optional', order: 0,
+            summary: '',
+            detail: {
+                purpose: '随着业务扩大，可升级服务商品牌或加入集团管理，详见说明文档：<a href="https://doc.weixin.qq.com/doc/w3_APkAbAaEACgMNonDAClRtif8uSJ9b?scode=AJEAIQdfAAoNdSBWoNAHcAdAbGACc" target="_blank">https://doc.weixin.qq.com/doc/w3_APkAbAaEACgMNonDAClRtif8uSJ9b?scode=AJEAIQdfAAoNdSBWoNAHcAdAbGACc</a>'
+            }
+        },
+        s3_11: {
+            id: 's3_11', phase: 3, name: '授信申请', tag: 'credit', order: 10,
+            confirmText: '已知',
+            summary: '',
+            detail: {
+                purpose: '申请腾讯营销授信额度，缓解资金压力。',
+                actions: [
+                    '满足以上所有条件的代理，请联系渠道经理或者管理组协助申请，并报备业务经营状况及历史情况。'
+                ],
+                conditions: [
+                    '签框代理（非框不适用）',
+                    '预付时长 ≥ 6 个月',
+                    '近 6 个月月均消耗 ≥ 500 万元',
+                    '集团 CAS 信用评级 ≥ C（含担保）'
+                ],
+                contact: '联系您的渠道经理协助申请'
+            }
+        },
+        s3_12: {
+            id: 's3_12', phase: 3, name: '预估提报', tag: 'creditOnly', order: 11,
+            confirmText: '已知',
+            summary: '',
+            detail: {
+                purpose: '授信代理需要定期预估后续消耗，便于平台资源规划。按月盘点月度/季度/年度消耗预估，渠道经理协助提报系统申请。',
+                contact: '联系您的渠道经理协助提报'
+            }
+        },
+        s3_13: {
+            id: 's3_13', phase: 3, name: '阅读服务商管理规范', tag: 'required', order: 12,
+            summary: '',
+            detail: {
+                plainActions: true,
+                purpose: '明确平台对服务商的管理要求与红线，避免违规。',
+                actions: [
+                    '文档链接：<a href="https://doc.weixin.qq.com/doc/w3_AGwAgQbLACoCNLdfKbeRCSRqywIjy" target="_blank">https://doc.weixin.qq.com/doc/w3_AGwAgQbLACoCNLdfKbeRCSRqywIjy</a>'
+                ]
+            }
+        },
+        s3_star: {
+            id: 's3_star', phase: 3, name: '星链启航营', tag: 'optional', order: 13,
+            tagText: '推荐',
+            tagClass: 'tag tag-recommend',
+            summary: '',
+            detail: {
+                purpose: '星链启航营是官方赋能成长课程，为后续服务商评级晋升的必要条件，推荐各位服务商伙伴学习：<a href="https://eschool.qq.com/activity/special?id=68" target="_blank">https://eschool.qq.com/activity/special?id=68</a>'
+            }
+        },
+        s3_honor: {
+            id: 's3_honor', phase: 3, name: 'K1服务商荣誉认证', tag: 'optional', order: 14,
+            summary: '',
+            detail: {
+                purpose: 'SAB及合伙人相关详见「对外版管理规范文档」（<a href="https://doc.weixin.qq.com/doc/w3_AGwAgQbLACoCNLdfKbeRCSRqywIjy" target="_blank">https://doc.weixin.qq.com/doc/w3_AGwAgQbLACoCNLdfKbeRCSRqywIjy</a>）第三章内容或渠道一站式平台的「电商信息管理板块」。评选SAB或合伙人可获得官方能力背书，提升品牌公信力。'
+            }
+        }
+    },
+
+    // 编排每个阶段的列表（带条件分支）
+    layout: {
+        phase1: [
+            { type: 'decision', ref: 's1_decision_invite' },
+            { type: 'step', ref: 's1_1' },
+            { type: 'step', ref: 's1_2' },
+            { type: 'step', ref: 's1_3' }
+        ],
+        phase2: [
+            { type: 'decision', ref: 's2_decision_recent' },
+            { type: 'decision', ref: 's2_decision_spend' },
+            { type: 'step', ref: 's2_5' },
+            { type: 'step', ref: 's2_supplier' },
+            { type: 'step', ref: 's2_6' }
+        ],
+        phase3_default: [
+            { type: 'step', ref: 's3_7' },
+            { type: 'step', ref: 's3_8' },
+            { type: 'step', ref: 's3_10' },
+            { type: 'step', ref: 's3_upgrade' },
+            { type: 'step', ref: 's3_11' },
+            { type: 'step', ref: 's3_12' },
+            { type: 'step', ref: 's3_13' },
+            { type: 'step', ref: 's3_star' },
+            { type: 'step', ref: 's3_honor' }
+        ],
+        phase3_nonframe: [
+            { type: 'step', ref: 's3_7' },
+            { type: 'step', ref: 's3_10' },
+            { type: 'step', ref: 's3_13' }
+        ]
+    }
+};
+
+// 标签映射
+const TAG_TEXT = {
+    required: '必做',
+    must: '必读',
+    optional: '选做',
+    decision: '判断',
+    credit: '条件严格',
+    creditOnly: '仅授信代理',
+    condition: '消耗≥50万',
+    frame: '签框/非框',
+    skip: '无需操作'
+};
+
+const TAG_CLASS = {
+    required: 'tag tag-required',
+    must: 'tag tag-must',
+    optional: 'tag tag-optional',
+    decision: 'tag tag-must',
+    credit: 'tag tag-credit',
+    creditOnly: 'tag tag-credit',
+    condition: 'tag tag-condition',
+    frame: 'tag tag-frame',
+    skip: 'tag tag-skip'
+};
+    </script>
+    <script>
+// ========== 全局状态 ==========
+// 免登录模式：所有访客直接进入，进度只保存在内存中，不写入任何存储
+let currentUser = '游客';
+let progress = {}; // { stepId: { status: 'done' | 'skipped' } }
+let currentPhase = 1;
+
+// 用户分流变量
+let userType = null; // 'frame' | 'nonframe' | null
+
+// ========== 工具函数 ==========
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+function showView(view) {
+    $$('.view').forEach(v => v.classList.add('hidden'));
+    $(view).classList.remove('hidden');
+}
+
+// ========== 主应用（免登录直接进入） ==========
+function enterApp() {
+    currentUser = '游客';
+    progress = {};
+    userType = null;
+    currentPhase = 1;
+    showView('#app-view');
+
+    applyUserTypeToUI();
+
+    renderInviteArea();
+    renderPolicyArea();
+    renderLanes();
+    renderSummary();
+}
+
+function bindGlobal() {
+    $('#btn-reset').addEventListener('click', () => {
+        if (!confirm('确认重置当前进度吗？此操作不可恢复。')) return;
+        progress = {};
+        userType = null;
+        currentPhase = 1;
+        renderInviteArea();
+        renderPolicyArea();
+        renderLanes();
+        renderSummary();
+    });
+}
+
+// ========== 顶部准入判断：有邀请码吗 ==========
+// ========== 批次解锁逻辑 ==========
+// 第一批：准入前 3 项（开通服务商端口 / 完成对公验证 / 缴纳准入保证金）
+const BATCH1_IDS = ['s1_1', 's1_2', 's1_3'];
+
+// 第一批是否已完成（done 或 skipped 均视为办结）
+function isBatch1Complete() {
+    return BATCH1_IDS.every(id => {
+        const p = progress[id];
+        return !!p && (p.status === 'done' || p.status === 'skipped');
+    });
+}
+
+// 第二批是否已解锁：前 3 项办结 + 已选择开户方式
+function isBatch2Unlocked() {
+    return isBatch1Complete() && !!userType;
+}
+
+// 当前应展示的全部步骤 id（按批次 + 开户方式过滤）
+function getVisibleStepIds() {
+    // 尚未选择开户方式：不展示任何待办，先由顶部引导提示引导用户做选择
+    if (!userType) return [];
+    // 前 3 项尚未办结：仅展示第一批
+    if (!isBatch1Complete()) return BATCH1_IDS.slice();
+    // 签框代理：需先回答「最近三个月 K1 竞价全量消耗是否达到 100 万？」；
+    // 若达到 100 万，还需回答「当季 K1 竞价全量消耗 ≥10 万？」，两道问题均答完前不展开后续待办
+    if (userType === 'frame' &&
+        (!progress['s2_decision_recent'] || (!isRecentNo() && !progress['s2_decision_spend']))) {
+        return BATCH1_IDS.slice();
+    }
+
+    // 第二批候选（阶段二 + 阶段三全部步骤）
+    const rest = [
+        's2_4', 's2_5', 's2_supplier', 's2_6',
+        's3_7', 's3_10', 's3_11', 's3_12', 's3_13',
+        's3_upgrade', 's3_star', 's3_honor'
+    ];
+
+    const filtered = rest.filter(id => {
+        if (!FLOW.steps[id]) return false;
+        // 「申请政策激励」已改为待办板块最上方的确认提示，不再作为待办事项
+        if (id === 's2_4') return false;
+        // 非框代理：不经过政策判断，直接进入准入后的 7 / 9 / 12
+        if (userType === 'nonframe') {
+            if (['s2_4', 's2_supplier', 's2_5', 's2_6'].includes(id)) return false;
+            if (['s3_8', 's3_11', 's3_12', 's3_upgrade', 's3_honor'].includes(id)) return false;
+        }
+        // 签框代理：「无政策」分支下，政策申请与合同 / 授信相关步骤全部无需操作
+        if (userType === 'frame') {
+            if (isNoPolicy() && ['s2_4', 's2_5', 's2_6', 's3_8', 's3_10', 's3_11', 's3_12'].includes(id)) return false;
+        }
+        return true;
+    });
+
+    return BATCH1_IDS.concat(filtered);
+}
+
+// 签框代理办结前 3 项后，自动定位并高亮上方的政策判断问题（仅状态变化时滚动一次）
+let lastPromptKey = null;
+function maybePromptPolicy() {
+    const el = $('#policy-area');
+    if (!el) return;
+    // 待回答：① 最近三个月是否达到 100 万；② 若已达到 100 万，还需回答当季是否达到 10 万
+    const needAnswer = (userType === 'frame' && isBatch1Complete() &&
+        (!progress['s2_decision_recent'] || (!isRecentNo() && !progress['s2_decision_spend'])));
+    const key = `${userType}|${isBatch1Complete()}|${!!progress['s2_decision_recent']}|${(progress['s2_decision_recent'] || {}).choice || ''}|${!!progress['s2_decision_spend']}`;
+
+    if (needAnswer) {
+        el.classList.add('attention');
+        if (lastPromptKey !== key) {
+            lastPromptKey = key;
+            setTimeout(() => {
+                if (typeof el.scrollIntoView === 'function') {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 150);
+        }
+    } else {
+        el.classList.remove('attention');
+        lastPromptKey = key;
+    }
+}
+
+// ========== 政策激励确认提示 ==========
+// 「申请政策激励」不是待办事项，仅作为一条确认提示展示在待办列表最上方
+function renderPolicyNotice() {
+    const area = $('#policy-notice-area');
+    if (!area) return;
+
+    // 仅签框代理、最近三个月达到 100 万、且当季选择「达到 10 万门槛，有政策」时展示
+    const hasPolicy = !!(progress['s2_decision_spend'] && progress['s2_decision_spend'].choice === 's2_4') && !isRecentNo();
+    const show = (userType === 'frame' && isBatch1Complete() && hasPolicy);
+
+    if (!show) {
+        area.classList.add('hidden');
+        area.innerHTML = '';
+        return;
+    }
+    area.classList.remove('hidden');
+
+    const confirmed = !!progress['s2_4_notice'];
+    area.innerHTML = `
+        <div class="policy-notice${confirmed ? ' confirmed' : ''}">
+            <div class="policy-notice-head">
+                <span class="policy-notice-icon">📢</span>
+                <div class="policy-notice-title">申请政策激励</div>
+                ${confirmed ? '<span class="policy-notice-tag">已确认</span>' : ''}
+            </div>
+            <div class="policy-notice-body">
+                <p>当季 K1 竞价全量消耗达到 10 万门槛后，即可申请政策激励，获得平台返点与流量支持。</p>
+                <div class="policy-notice-cond">
+                    <div class="policy-notice-cond-title">条件门槛：</div>
+                    <ol>
+                        <li>当季 K1 竞价全量消耗 ≥10 万</li>
+                        <li>当季度完成合同归档</li>
+                        <li>有效人户挂接</li>
+                    </ol>
+                </div>
+                <p class="policy-notice-emph">请先登录「服务商系统」，进入「政策激励」，核对当季消耗数据是否符合条件，再依照以下步骤提交激励申请。</p>
+            </div>
+            ${confirmed ? '' : `<div class="policy-notice-actions">
+                <button id="btn-policy-notice-ok" class="primary-btn policy-notice-btn">✓ 我已核对，继续后续步骤</button>
+            </div>`}
+        </div>`;
+
+    const btn = $('#btn-policy-notice-ok');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            progress['s2_4_notice'] = { status: 'done' };
+            saveProgress();
+            renderSummary();
+        });
+    }
+}
+
+// 生成"下一步该做什么"的引导提示（按流程顺序提示）
+// 渲染到「我的待办」板块内、待办描述下方 / 具体待办上方
+function renderFlowHint() {
+    const area = $('#flow-hint-area');
+    if (!area) return;
+    const hint = buildLockHint();
+    area.innerHTML = hint;
+    area.classList.toggle('hidden', !hint);
+}
+
+function buildLockHint() {
+    // ① 先选择开户方式（此时不展示任何待办）
+    if (!userType) {
+        return `<div class="summary-lock">
+            <span class="summary-lock-icon">1️⃣</span>
+            <div>
+                <div class="summary-lock-title">第一步：请选择开户方式</div>
+                <div class="summary-lock-desc">请先在上方「<b>有邀请码吗？</b>」中选择<b>签框开户</b>或<b>非框开户</b>，选择后系统将为你生成对应的待办清单。</div>
+            </div>
+        </div>`;
+    }
+    // ② 完成前 3 项
+    if (!isBatch1Complete()) {
+        return `<div class="summary-lock">
+            <span class="summary-lock-icon">2️⃣</span>
+            <div>
+                <div class="summary-lock-title">第二步：办理前 3 项准入准备</div>
+                <div class="summary-lock-desc">请依次完成下方 <b>${BATCH1_IDS.filter(id => !isDone(id)).length}</b> 项待办，全部办结后将自动解锁后续步骤。</div>
+            </div>
+        </div>`;
+    }
+    // ③ 签框代理：先回答「最近三个月 K1 竞价全量消耗是否达到 100 万？」
+    if (userType === 'frame' && !progress['s2_decision_recent']) {
+        return `<div class="summary-lock">
+            <span class="summary-lock-icon">3️⃣</span>
+            <div>
+                <div class="summary-lock-title">第三步：回答最近三个月消耗门槛</div>
+                <div class="summary-lock-desc">前 3 项已办结。请在上方回答「<b>最近三个月 K1 竞价全量消耗是否达到 100 万？</b>」。</div>
+            </div>
+        </div>`;
+    }
+    // ④ 已达 100 万：再回答当季政策判断（未达 100 万则无需回答，直接走无政策链路）
+    if (userType === 'frame' && !isRecentNo() && !progress['s2_decision_spend']) {
+        return `<div class="summary-lock">
+            <span class="summary-lock-icon">4️⃣</span>
+            <div>
+                <div class="summary-lock-title">第四步：回答政策判断</div>
+                <div class="summary-lock-desc">请在上方回答「<b>当季 K1 竞价全量消耗 ≥10 万？</b>」，决定是否申请政策激励。</div>
+            </div>
+        </div>`;
+    }
+    return '';
+}
+
+function renderInviteArea() {
+    const el = $('#invite-area');
+    if (!el) return;
+    const chosen = userType; // 'frame' | 'nonframe' | null
+    el.innerHTML = `
+        <div class="invite-question">
+            <span class="invite-q-icon">?</span>
+            <div class="invite-q-text">
+                <div class="invite-q-title">有邀请码吗？</div>
+                <div class="invite-q-sub">请选择您的开户方式，以确定后续准入流程</div>
+            </div>
+        </div>
+        <div class="invite-options">
+            <button class="invite-opt ${chosen === 'frame' ? 'chosen' : ''}" data-type="frame">
+                <span class="invite-opt-check">✓</span>
+                <span class="invite-opt-letter">a</span>
+                <span class="invite-opt-name">签框开户</span>
+                <span class="invite-opt-desc">填写邀请码，补充资质，挂接人户</span>
+            </button>
+            <button class="invite-opt ${chosen === 'nonframe' ? 'chosen' : ''}" data-type="nonframe">
+                <span class="invite-opt-check">✓</span>
+                <span class="invite-opt-letter">b</span>
+                <span class="invite-opt-name">非框开户</span>
+                <span class="invite-opt-desc">无邀请码，自主选择非框开户</span>
+            </button>
+        </div>`;
+
+    $$('.invite-opt').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setUserType(btn.dataset.type);
+        });
+    });
+}
+
+// ========== 顶部判断：最近三个月 100 万 + 当季 K1 竞价全量消耗 10 万（是否需要政策） ==========
+function renderPolicyArea() {
+    const el = $('#policy-area');
+    if (!el) return;
+
+    // 仅签框代理需要做「是否需要政策」判断；非框代理直接跳到准入后
+    // 且需等第一批（前 3 项）办结后才出现该问题
+    if (userType !== 'frame' || !isBatch1Complete()) {
+        el.classList.add('hidden');
+        el.innerHTML = '';
+        return;
+    }
+    el.classList.remove('hidden');
+
+    const recentChoice = progress['s2_decision_recent'] && progress['s2_decision_recent'].choice;
+    const spendChoice = progress['s2_decision_spend'] && progress['s2_decision_spend'].choice;
+
+    // 问题一：最近三个月 K1 竞价全量消耗是否达到 100 万
+    let html = `
+        <div class="policy-q">
+            <div class="invite-question">
+                <span class="invite-q-icon">?</span>
+                <div class="invite-q-text">
+                    <div class="invite-q-title">最近三个月 K1 竞价全量消耗是否达到 100 万？</div>
+                    <div class="invite-q-sub">「最近三个月」指从今天往前推三个月的区间，例如今天是 2026年8月8日，则统计区间为 2026年5月8日—2026年8月8日。</div>
+                </div>
+            </div>
+            <div class="invite-options">
+                <button class="invite-opt ${recentChoice === 's2_recent_yes' ? 'chosen' : ''}" data-q="recent" data-choice="s2_recent_yes">
+                    <span class="invite-opt-check">✓</span>
+                    <span class="invite-opt-letter yes">✓</span>
+                    <span class="invite-opt-name">达到100万</span>
+                </button>
+                <button class="invite-opt ${recentChoice === 's2_recent_no' ? 'chosen' : ''}" data-q="recent" data-choice="s2_recent_no">
+                    <span class="invite-opt-check">✓</span>
+                    <span class="invite-opt-letter no">×</span>
+                    <span class="invite-opt-name">未达到100万</span>
+                </button>
+            </div>
+        </div>`;
+
+    // 问题二：仅在「达到 100 万」时才需要回答当季门槛
+    if (recentChoice === 's2_recent_yes') {
+        html += `
+        <div class="policy-q">
+            <div class="invite-question">
+                <span class="invite-q-icon">?</span>
+                <div class="invite-q-text">
+                    <div class="invite-q-title">当季 K1 竞价全量消耗 ≥10 万？</div>
+                    <div class="invite-q-sub">识别当季 K1 竞价全量消耗是否达到 10 万门槛，以决定是否申请政策激励。「当季」指当前自然季度起始日至今天，例如今天是 2026年8月8日，则统计区间为 2026年7月1日—2026年8月8日。</div>
+                </div>
+            </div>
+            <div class="invite-options">
+                <button class="invite-opt ${spendChoice === 's2_4' ? 'chosen' : ''}" data-q="spend" data-choice="s2_4">
+                    <span class="invite-opt-check">✓</span>
+                    <span class="invite-opt-letter yes">✓</span>
+                    <span class="invite-opt-name">达到10万门槛，有政策</span>
+                </button>
+                <button class="invite-opt ${spendChoice === 's2_4_no' ? 'chosen' : ''}" data-q="spend" data-choice="s2_4_no">
+                    <span class="invite-opt-check">✓</span>
+                    <span class="invite-opt-letter no">×</span>
+                    <span class="invite-opt-name">未达门槛/自主放弃政策，无政策</span>
+                </button>
+            </div>
+        </div>`;
+    }
+
+    el.innerHTML = html;
+
+    $$('#policy-area .invite-opt').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const qid = btn.dataset.q === 'recent' ? 's2_decision_recent' : 's2_decision_spend';
+            setDecisionChoice(qid, btn.dataset.choice);
+        });
+    });
+}
+
+// ========== 用户分流（非框 / 签框）切换 ==========
+function setUserType(type) {
+    userType = type;
+    // 重置刚做的判断为完成
+    if (progress['s1_decision_invite']) delete progress['s1_decision_invite'];
+    progress['s1_decision_invite'] = { status: 'done', choice: type === 'frame' ? 's1_frame' : 's1_nonframe' };
+
+    applyUserTypeToUI();
+    renderInviteArea();
+    renderPolicyArea();
+    renderLanes();
+    renderSummary();
+    closeModal();
+}
+window.setUserType = setUserType;
+
+function applyUserTypeToUI() {
+    // 顶部提示条已移除（无需操作）
+}
+
+// ========== 渲染：三阶段泳道全景 ==========
+function isDone(id) {
+    const p = progress[id];
+    if (!p) return false;
+    return p.status === 'done' || p.status === 'skipped';
+}
+
+// 判断签框代理是否在「最近三个月是否达到 100 万」中选择了「未达到」
+function isRecentNo() {
+    const p = progress['s2_decision_recent'];
+    return !!(p && p.choice === 's2_recent_no');
+}
+
+// 判断是否走「无政策」链路：最近三个月未达 100 万，或当季未达 10 万门槛 / 自主放弃
+function isNoPolicy() {
+    if (isRecentNo()) return true;
+    const p = progress['s2_decision_spend'];
+    return !!(p && p.choice === 's2_4_no');
+}
+
+// 判断某步骤是否与当前开户方式无关（无关则灰掉）
+function isStepIrrelevant(id) {
+    if (!userType) return false; // 尚未选择开户方式时，不灰任何步骤
+
+    if (userType === 'nonframe') {
+        const irrelevant = [
+            's1_frame',
+            's2_decision_recent', 's2_decision_spend', 's2_4', 's2_4_no', 's2_supplier', 's2_5', 's2_6',
+            's3_8', 's3_11', 's3_12', 's3_upgrade', 's3_honor'
+        ];
+        return irrelevant.includes(id);
+    }
+
+    if (userType === 'frame') {
+        if (id === 's1_nonframe') return true;
+        // 最近三个月未达 100 万：无需再判断当季门槛，相关政策步骤无需操作
+        if (isRecentNo() && ['s2_decision_spend', 's2_4'].includes(id)) return true;
+        // 签框下选择「不需要政策」时，以下步骤无需操作
+        if (isNoPolicy() && ['s2_5', 's2_6', 's3_8', 's3_10', 's3_11', 's3_12'].includes(id)) {
+            return true;
+        }
+        return false;
+    }
+
+    return false;
+}
+
+function renderLanes() {
+    const area = $('#lanes-area');
+    if (!area) return;
+
+    renderLegend();
+
+    const phases = FLOW.phases;
+    let html = '';
+
+    phases.forEach((ph, idx) => {
+        html += `<section class="stage">
+            <header class="stage-head">
+                <span class="stage-no">${String(idx + 1).padStart(2, '0')}</span>
+                <div>
+                    <div class="stage-title">${ph.name}</div>
+                    <div class="stage-sub">${ph.desc}</div>
+                </div>
+            </header>
+            <div class="flow">${renderLaneFlow(ph.id)}</div>
+        </section>`;
+
+        if (idx < phases.length - 1) {
+            html += `<div class="lane-arrow" aria-hidden="true">
+                <svg fill="none" height="30" viewBox="0 0 24 24" width="30"><path d="M4 12h15M13 5l7 7-7 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"/></svg>
+            </div>`;
+        }
+    });
+
+    area.innerHTML = html;
+
+    bindLanesEvents();
+}
+
+function renderLegend() {
+    const el = $('#lanes-legend');
+    if (!el) return;
+    el.innerHTML = `
+        <span><i class="sw sw-req"></i>必做步骤</span>
+        <span><i class="sw sw-opt"></i>选做</span>
+        <span><i class="sw sw-dec"></i>判断 / 条件</span>`;
+}
+
+// 每个阶段的泳道内部流程
+function renderLaneFlow(phaseId) {
+    let html = '';
+
+    if (phaseId === 1) {
+        html += renderPhase1Lane();
+    } else if (phaseId === 2) {
+        html += renderPhase2Lane();
+    } else if (phaseId === 3) {
+        html += renderPhase3Lane();
+    }
+    return html;
+}
+
+function renderPhase1Lane() {
+    let html = laneDecisionHTML('s1_decision_invite');
+
+    html += `<div class="branch">
+        <span class="edge">有 →</span>
+        ${laneStepHTML('s1_frame')}
+        <span class="edge">无 →</span>
+        ${laneStepHTML('s1_nonframe')}
+    </div>`;
+
+    html += laneStepHTML('s1_1');
+    html += laneStepHTML('s1_2');
+    html += laneStepHTML('s1_3');
+    return html;
+}
+
+function renderPhase2Lane() {
+    // 前置判断：最近三个月 K1 竞价全量消耗是否达到 100 万
+    let html = laneDecisionHTML('s2_decision_recent');
+
+    // 当季门槛判断：是否申请政策激励
+    html += laneDecisionHTML('s2_decision_spend');
+
+    html += `<div class="branch">
+        <span class="edge">是 →</span>
+        ${laneStepHTML('s2_4')}
+        <span class="edge">否 →</span>
+        ${laneStepHTML('s2_4_no')}
+    </div>`;
+
+    html += laneStepHTML('s2_5'); // 政策集团累量申请
+    html += laneStepHTML('s2_supplier'); // 供应商入库
+    html += laneStepHTML('s2_6'); // 合同签署
+    return html;
+}
+
+function renderPhase3Lane() {
+    // 始终展示完整布局，与当前开户方式无关的步骤由 isStepIrrelevant 灰掉
+    const steps = FLOW.layout.phase3_default;
+    return steps.map(item => laneStepHTML(item.ref)).join('');
+}
+
+// 判断节点（菱形）
+function laneDecisionHTML(id) {
+    const step = FLOW.steps[id];
+    if (!step) return '';
+    const p = progress[id];
+    const isDone = p && (p.status === 'done' || p.status === 'skipped');
+    const dimmed = isStepIrrelevant(id) ? ' dimmed' : '';
+    const branches = (step.branches && step.branches.length)
+        ? `<div class="decision-options">${step.branches.map(b =>
+            `<div class="decision-opt"><span class="dopt-label">${b.label}</span><span class="dopt-target">${b.label2}</span></div>`
+        ).join('')}</div>`
+        : '';
+    return `
+        <div class="step${dimmed}">
+            <span class="dot dec"></span>
+            <details class="card dec" data-id="${id}" data-decision="1">
+                <summary>
+                    <span class="name">${step.name}</span>
+                    <span class="tag">判断</span>
+                </summary>
+                <div class="detail">${branches}${laneDetailBody(step)}</div>
+            </details>
+        </div>`;
+}
+
+// 普通步骤卡片（可展开）
+function laneStepHTML(id) {
+    const step = FLOW.steps[id];
+    if (!step) return '';
+    const p = progress[id];
+    const status = p && p.status;
+    const isDone = status === 'done';
+    const isSkipped = status === 'skipped';
+
+    let typeClass = '';
+    if (step.tag === 'required' || step.tag === 'must') typeClass = 'req';
+    else if (step.tag === 'optional') typeClass = 'opt';
+    else if (step.tag === 'decision') typeClass = 'dec';
+    else typeClass = 'req';
+
+    let dotText = '—';
+    if (step.letter) dotText = step.letter;
+    else if (typeof step.order === 'number' && step.order > 0) dotText = step.order;
+    const dotClass = (step.tag === 'optional') ? 'opt' : (step.letter ? 'letter' : '');
+
+    const branchType = (id === 's1_frame') ? 'frame' : (id === 's1_nonframe' ? 'nonframe' : '');
+    const isChosen = branchType && userType === branchType;
+
+    const doneBadge = isDone ? '<span class="tag tag-done">已完成</span>' : '';
+    const skipBadge = isSkipped ? '<span class="tag tag-skipped">已跳过</span>' : '';
+
+    const dimmed = isStepIrrelevant(id) ? ' dimmed' : '';
+
+    return `
+        <div class="step ${isChosen ? 'chosen' : ''} ${isSkipped ? 'skipped' : ''}${dimmed}">
+            <span class="dot ${dotClass} ${isDone ? 'done' : ''}">${dotText}</span>
+            <details class="card ${typeClass} ${isDone ? 'done' : ''}" data-id="${id}" ${branchType ? `data-branch-type="${branchType}"` : ''}>
+                <summary>
+                    <span class="name">${step.name}</span>
+                    <span class="${step.tagClass || 'tag'}">${step.tagText || TAG_TEXT[step.tag]}</span>
+                </summary>
+                <div class="detail">${laneDetailBody(step)}${doneBadge ? `<div class="lane-badges">${doneBadge}${skipBadge}</div>` : ''}</div>
+            </details>
+        </div>`;
+}
+
+// 场景化详情：s3_7 仅在「签框开户 + 达到10万门槛（申请政策激励）」时展示完整说明，
+// 其余场景（非框开户 / 签框无政策）仅展示操作手册阅读说明
+function getStepDetail(step) {
+    if (step.id === 's3_7' && step.detail && step.detail.alt &&
+        !(userType === 'frame' && !isNoPolicy())) {
+        return { purpose: step.detail.alt.purpose, altOnly: true };
+    }
+    return step.detail;
+}
+
+// 详情内容（简化版）
+function laneDetailBody(step) {
+    const d = getStepDetail(step);
+    let h = '';
+    // 判断节点：summary 与 purpose 通常是同一句话，跳过 summary 避免重复
+    if (step.summary && step.type !== 'decision' && !(d && d.altOnly)) h += `<p>${step.summary}</p>`;
+    if (d) {
+        if (d.purpose) h += `<p>${d.purpose}</p>`;
+        if (d.conditions && d.conditions.length) {
+            h += `<p><strong>条件门槛：</strong></p><ul>${d.conditions.map(c => `<li>${c}</li>`).join('')}</ul>`;
+        }
+        if (d.actions && d.actions.length) {
+            if (!d.plainActions) h += `<p><strong>操作：</strong></p>`;
+            h += `<ul>${d.actions.map(a => `<li>${a}</li>`).join('')}</ul>`;
+        }
+        if (d.callout) h += `<p class="muted">${d.callout}</p>`;
+    }
+    return h || '<p class="muted">此步骤无额外说明。</p>';
+}
+
+function bindLanesEvents() {
+    $$('#lanes-area .card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('a')) return;
+            const stepEl = card.closest('.step');
+            if (stepEl && stepEl.classList.contains('dimmed')) return;
+            const bt = card.dataset.branchType;
+            if (bt) {
+                setUserType(bt);
+                return;
+            }
+            if (card.dataset.decision) return;
+            openStep(card.dataset.id);
+        });
+    });
+}
+
+// 免登录模式：进度仅保存在内存，不做任何持久化（关闭/刷新页面即清空）
+function saveProgress() {
+    /* no-op：不写入任何本地存储 */
+}
+
+// ========== 详情弹窗 ==========
+function openStep(id) {
+    const step = FLOW.steps[id];
+    if (!step) return;
+    if (step.type === 'decision') return; // 判断节点不弹窗
+
+    $('#detail-title').textContent = step.name;
+
+    let tagsHTML = `<span class="${step.tagClass || TAG_CLASS[step.tag]}">${step.tagText || TAG_TEXT[step.tag]}</span>`;
+    if (step.condition) {
+        tagsHTML += `<span class="tag tag-condition">条件：${step.condition}</span>`;
+    }
+    if (step.creditNote) tagsHTML += `<span class="tag tag-condition">非框代理直达</span>`;
+    $('#detail-tags').innerHTML = tagsHTML;
+
+    let content = '';
+    const d = getStepDetail(step) || {};
+
+    if (d.purpose) content += `<h4>目的</h4><p>${d.purpose}</p>`;
+    if (d.conditions) {
+        content += `<h4>条件门槛（同时满足）</h4><ul>${d.conditions.map(c => `<li>${c}</li>`).join('')}</ul>`;
+    }
+    if (d.actions) {
+        content += `<h4>操作步骤</h4><ul>${d.actions.map(a => `<li>${a}</li>`).join('')}</ul>`;
+    }
+    if (d.materials && d.materials.length) {
+        content += `<h4>所需材料</h4><ul>${d.materials.map(m => `<li>${m}</li>`).join('')}</ul>`;
+    }
+    if (d.callout) content += `<div class="callout">${d.callout}</div>`;
+    if (d.warn) content += `<div class="warn"><strong>注意：</strong>${d.warn}</div>`;
+    if (d.email) {
+        const e = d.email;
+        content += `<h4>${e.title || '邮件申请模板（可直接复制）'}</h4>`;
+        content += `<div class="email-box">`;
+        content += `<div><strong>收件人：</strong>${e.to}</div>`;
+        content += `<div><strong>抄送：</strong>${e.cc}</div>`;
+        content += `<div><strong>邮件主题：</strong>${e.subject}</div>`;
+        content += `<div><strong>邮件正文：</strong></div>`;
+        content += `<p>${e.body}</p>`;
+        if (e.items && e.items.length) {
+            content += `<ul>${e.items.map(it => `<li>${it}</li>`).join('')}</ul>`;
+        }
+        content += `</div>`;
+    }
+    if (d.contact) content += `<h4>联系人</h4><p>${d.contact}</p>`;
+    if (d.tips) content += `<h4>小贴士</h4><p>${d.tips}</p>`;
+    if (d.creditNote) content += `<div class="callout">${d.creditNote}</div>`;
+
+    $('#detail-content').innerHTML = content || '<p style="color:var(--text-2)">此步骤无需详细操作说明。</p>';
+
+    const p = progress[id];
+    if (p && p.status === 'skipped') {
+        $('#btn-skip-step').classList.add('hidden');
+    } else {
+        $('#btn-skip-step').classList.toggle('hidden', step.tag === 'required' || step.tag === 'must' || step.tag === 'creditOnly');
+    }
+
+    $('#btn-complete-step').dataset.id = id;
+    $('#btn-complete-step').textContent = step.confirmText ? `✓ ${step.confirmText}` : '已完成';
+
+    $('#detail-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    $('#detail-modal').classList.add('hidden');
+}
+
+function bindModal() {
+    $('#detail-close').addEventListener('click', closeModal);
+    $('.modal-mask').addEventListener('click', closeModal);
+    $('#decision-close').addEventListener('click', closeDecisionModal);
+    $('#decision-modal .modal-mask').addEventListener('click', closeDecisionModal);
+
+    $('#btn-complete-step').addEventListener('click', (e) => {
+        const id = e.target.dataset.id;
+        progress[id] = { status: 'done' };
+        saveProgress();
+        closeModal();
+        renderLanes();
+        renderSummary();
+    });
+
+    $('#btn-skip-step').addEventListener('click', (e) => {
+        const id = $('#btn-complete-step').dataset.id;
+        progress[id] = { status: 'skipped' };
+        saveProgress();
+        closeModal();
+        renderLanes();
+        renderSummary();
+    });
+}
+
+// ========== 摘要列表（逐步办理清单，拆分为「待办」+「已完成」） ==========
+function renderSummary() {
+    const ulTodo = $('#summary-list-todo');
+    const ulDone = $('#summary-list-done');
+    if (!ulTodo || !ulDone) return;
+
+    // 前 3 项办结后「当季全量消耗」问题才应出现，此处同步刷新顶部判断区
+    renderPolicyArea();
+    maybePromptPolicy();
+
+    // 「我的待办」板块始终展示，引导提示渲染在待办描述下方、具体待办上方
+    renderFlowHint();
+    // 「申请政策激励」确认提示：展示在待办列表最上方（不计入待办）
+    renderPolicyNotice();
+
+    const card = $('#summary-card');
+    if (card) card.classList.remove('hidden');
+
+    // 尚未选择开户方式：不展示具体待办列表，仅由板块内的引导提示引导用户先做选择
+    if (!userType) {
+        $$('#summary-card .summary-part').forEach(part => part.classList.add('hidden'));
+        ulTodo.innerHTML = '';
+        ulDone.innerHTML = '';
+        $('#summary-todo-count').textContent = '0';
+        $('#summary-done-count').textContent = '0';
+        return;
+    }
+    $$('#summary-card .summary-part').forEach(part => part.classList.remove('hidden'));
+
+    const todoItems = [];
+    const doneItems = [];
+
+    // 按批次 + 开户方式，取当前应展示的步骤
+    const visibleIds = getVisibleStepIds();
+
+    visibleIds.forEach(id => {
+        const step = FLOW.steps[id];
+        if (!step) return;
+
+        let p = progress[id];
+        if (!p) {
+            todoItems.push({ id, status: 'todo', optional: step.tag === 'optional' });
+        } else if (p.status === 'done') {
+            doneItems.push({ id, status: 'done', optional: step.tag === 'optional' });
+        } else if (p.status === 'skipped') {
+            doneItems.push({ id, status: 'skipped', optional: step.tag === 'optional' });
+        }
+    });
+
+    $('#summary-todo-count').textContent = todoItems.length;
+    $('#summary-done-count').textContent = doneItems.length;
+
+    // Part 1：待办
+    if (!todoItems.length) {
+        ulTodo.innerHTML = '<div class="summary-empty">🎉 太棒了！当前所有待办都已完成。</div>';
+    } else {
+        const firstTodoIndex = todoItems.findIndex(it => !it.optional);
+
+        ulTodo.innerHTML = todoItems.map((it, idx) => {
+            const step = FLOW.steps[it.id];
+            const isOptionalTodo = it.optional;
+            const isCurrent = idx === firstTodoIndex;
+            const openAttr = isCurrent ? ' open' : '';
+
+            const statusClass = isOptionalTodo ? 'optional' : '';
+            const statusText = isOptionalTodo ? (step.tagText || '选做') : '待办';
+            const body = laneDetailBody(step);
+
+            const completeText = step.confirmText ? `✓ ${step.confirmText}` : '✓ 完成';
+            let actions = `<div class="summary-actions">
+                <button class="summary-complete-btn" data-id="${it.id}">${completeText}</button>
+                ${step.tag !== 'required' && step.tag !== 'must' && step.tag !== 'creditOnly' ? `<button class="summary-skip-btn" data-id="${it.id}">跳过</button>` : ''}
+            </div>`;
+
+            const currentBadge = isCurrent ? '<span class="summary-current-badge">当前步骤</span>' : '';
+
+            return `<li class="summary-item ${statusClass}${isCurrent ? ' current' : ''}">
+                <details class="summary-details" data-id="${it.id}"${openAttr}>
+                    <summary>
+                        <span class="summary-num">${idx + 1}</span>
+                        <div class="summary-name ${statusClass}">${step.name}</div>
+                        <span class="${step.tagClass || TAG_CLASS[step.tag]}" style="margin-right:8px">${step.tagText || TAG_TEXT[step.tag]}</span>
+                        ${currentBadge}
+                        <span class="summary-status">${statusText}</span>
+                    </summary>
+                    <div class="summary-detail-body">
+                        ${body}
+                        ${actions}
+                    </div>
+                </details>
+            </li>`;
+        }).join('');
+    }
+
+    // Part 2：已完成
+    if (!doneItems.length) {
+        ulDone.innerHTML = '<div class="summary-empty" style="padding:8px 0">还没有完成的步骤。</div>';
+    } else {
+        ulDone.innerHTML = doneItems.map((it, idx) => {
+            const step = FLOW.steps[it.id];
+            const statusClass = it.status === 'done' ? 'done' : 'skipped';
+            const statusText = it.status === 'done' ? '已完成' : '已跳过';
+
+            return `<li class="summary-item ${statusClass}">
+                <details class="summary-details" data-id="${it.id}">
+                    <summary>
+                        <span class="summary-num ${it.status === 'done' ? 'done' : ''}">✓</span>
+                        <div class="summary-name ${statusClass}">${step.name}</div>
+                        <span class="${step.tagClass || TAG_CLASS[step.tag]}" style="margin-right:8px">${step.tagText || TAG_TEXT[step.tag]}</span>
+                        <span class="summary-status">${statusText}</span>
+                    </summary>
+                    <div class="summary-detail-body">
+                        ${laneDetailBody(step)}
+                        <div class="summary-actions">
+                            <button class="summary-reset-btn" data-id="${it.id}">↺ 重做</button>
+                        </div>
+                    </div>
+                </details>
+            </li>`;
+        }).join('');
+    }
+
+    $$('#summary-list-todo .summary-complete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            progress[btn.dataset.id] = { status: 'done' };
+            saveProgress();
+            renderLanes();
+            renderSummary();
+        });
+    });
+    $$('#summary-list-todo .summary-skip-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            progress[btn.dataset.id] = { status: 'skipped' };
+            saveProgress();
+            renderLanes();
+            renderSummary();
+        });
+    });
+    $$('#summary-list-done .summary-reset-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            delete progress[btn.dataset.id];
+            saveProgress();
+            renderLanes();
+            renderSummary();
+        });
+    });
+}
+window.openStep = openStep;
+
+// 摘要里点击判断节点：弹出选择弹窗
+function openDecision(id) {
+    const step = FLOW.steps[id];
+    if (!step || step.type !== 'decision') return;
+    const branches = step.branches || [];
+    if (!branches.length) return;
+
+    $('#decision-title').textContent = step.name;
+    const promptText = step.detail && step.detail.purpose ? step.detail.purpose : (step.summary || '');
+    $('#decision-prompt').innerHTML = `<p>${promptText}</p>`;
+
+    const choicesEl = $('#decision-choices');
+    const currentP = progress[id];
+    const currentChoice = currentP && currentP.choice;
+    choicesEl.innerHTML = branches.map(b => `
+        <button class="decision-choice-btn${b.target === currentChoice ? ' selected' : ''}" data-target="${b.target}">
+            <span class="dopt-label">${b.label}</span>
+            <span class="dopt-target">${b.label2}</span>
+        </button>
+    `).join('');
+
+    // 绑定选择事件
+    $$('#decision-choices .decision-choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setDecisionChoice(id, btn.dataset.target);
+            closeDecisionModal();
+            // 选择完后自动滚动到泳道图对应判断节点并展开，让用户看到分支
+            const card = document.querySelector(`#lanes-area .card[data-id="${id}"]`);
+            if (card && card.tagName === 'DETAILS') {
+                card.open = true;
+                if (typeof card.scrollIntoView === 'function') {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    });
+
+    $('#decision-modal').classList.remove('hidden');
+}
+window.openDecision = openDecision;
+
+function closeDecisionModal() {
+    const m = $('#decision-modal');
+    if (m) m.classList.add('hidden');
+}
+window.closeDecisionModal = closeDecisionModal;
+
+function setDecisionChoice(id, choice) {
+    progress[id] = { status: 'done', choice };
+    saveProgress();
+    renderPolicyArea();
+    renderLanes();
+    renderSummary();
+}
+window.setDecisionChoice = setDecisionChoice;
+
+// ========== 启动 ==========
+function init() {
+    bindGlobal();
+    bindModal();
+
+    // 免登录：直接进入主页面
+    enterApp();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// 注入额外样式
+(function injectExtraStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .usertype-bar {
+            background: #FFFBEB; border-bottom: 1px solid #FEF3C7;
+            padding: 10px 40px;
+        }
+        .usertype-inner {
+            max-width: 1180px; margin: 0 auto;
+            display: flex; align-items: center; gap: 12px; font-size: 13px;
+        }
+        .badge-orange {
+            background: var(--orange); color: #fff;
+            padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;
+        }
+        .badge-blue {
+            background: var(--primary); color: #fff;
+            padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;
+        }
+        .link-btn {
+            margin-left: auto; background: transparent; border: none;
+            color: var(--primary); cursor: pointer; font-size: 13px;
+        }
+        .link-btn:hover { text-decoration: underline; }
+    `;
+    document.head.appendChild(style);
+})();
+    </script>
+</body>
+</html>

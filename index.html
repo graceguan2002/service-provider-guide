@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腾讯营销服务商准入指引</title>
+    <link rel="stylesheet" href="styles.css?v=20260929x">
+</head>
+<body>
+    <!-- 主页面（免登录，直接进入） -->
+    <div id="app-view" class="view">
+        <div class="topbar-wrap">
+            <!-- 顶部提示：免登录模式，进度不保存 -->
+            <div class="guest-notice">
+                <span class="guest-notice-icon">⚠️</span>
+                <span>勾选进度仅保存在当前页面，<b>关闭或刷新页面后进度会被清空</b>，不会上传或同步到任何系统。</span>
+            </div>
+
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="topbar-brand">腾讯营销</div>
+                    <div class="topbar-title">服务商准入指引助手</div>
+                </div>
+                <div class="topbar-right">
+                    <button id="btn-reset" class="ghost-btn">重置进度</button>
+                </div>
+            </header>
+        </div>
+
+        <main class="container">
+            <!-- 导语：背景说明与工具导航 -->
+            <section class="intro-card">
+                <div class="intro-head">
+                    <div class="intro-head-left">
+                        <span class="intro-badge">导语</span>
+                        <div>
+                            <div class="intro-title">欢迎加入腾讯营销服务商生态</div>
+                            <div class="intro-lead">K1 竞价自助开放生态 · 准入办理与政策激励指引</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="intro-body">
+                    <p class="intro-para">
+                        腾讯营销 K1 竞价现已全面升级为<b>自助开放生态</b>，我们诚挚欢迎各位广告代理商入驻腾讯生态，依托腾讯营销平台开展业务经营与商业合作。
+                    </p>
+                    <p class="intro-para">
+                        为帮助您高效、顺畅地完成准入并开展经营活动，本工具围绕以下四个维度提供全流程指引：
+                    </p>
+                    <ul class="intro-points">
+                        <li class="intro-point">
+                            <span class="intro-point-no">1</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">开户流程全景</div>
+                                <div class="intro-point-desc">按「准入前 — 准入期 — 准入后」三阶段拆解完整开户链路，逐项列明各环节的操作要求、所需材料与办理入口。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">2</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">季度消耗与政策对照</div>
+                                <div class="intro-point-desc">明确季度全量消耗所对应的政策激励标准，帮助您提前规划经营节奏与业务目标，合理安排投放与结算安排。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">3</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">政策激励申请通道</div>
+                                <div class="intro-point-desc">当季 K1 竞价全量消耗达到 <b>10 万元门槛</b>后，即可开启政策激励申请，完成集团累量、合同签署、授信等流程，获得平台返点与流量支持。</div>
+                            </div>
+                        </li>
+                        <li class="intro-point">
+                            <span class="intro-point-no">4</span>
+                            <div class="intro-point-text">
+                                <div class="intro-point-title">分阶段模块导航</div>
+                                <div class="intro-point-desc">系统将依据您的开户方式与当前所处阶段，自动聚焦对应模块并生成专属待办清单，无需在冗长流程中自行定位。</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 顶部准入判断：有邀请码吗 -->
+            <section id="invite-area" class="invite-area"></section>
+
+            <!-- 顶部判断：最近三个月 100 万 + 当季 K1 竞价全量消耗 10 万（签框代理） -->
+            <section id="policy-area" class="invite-area policy-area"></section>
+
+            <!-- 待办清单：逐步 check 完成（拆为两个 part：待办 + 已完成） -->
+            <section class="summary-card hidden" id="summary-card">
+                <div class="section-head">
+                    <span class="section-badge">① 逐步办理</span>
+                    <div class="summary-title">我的待办</div>
+                    <div class="summary-sub">请按序完成以下实操步骤。每步完成后点击「完成」打勾，后续步骤将逐步解锁。</div>
+                </div>
+
+                <!-- 流程引导提示：位于待办描述下方、具体待办列表上方 -->
+                <div id="flow-hint-area" class="flow-hint-area hidden"></div>
+
+                <!-- 政策激励确认提示：非待办，展示在待办列表最上方 -->
+                <div id="policy-notice-area" class="policy-notice-area hidden"></div>
+
+                <!-- Part 1：待办 -->
+                <div class="summary-part">
+                    <div class="summary-part-head">
+                        <span class="summary-part-title">📌 待办</span>
+                        <span class="summary-part-count" id="summary-todo-count">0</span>
+                    </div>
+                    <ul id="summary-list-todo" class="summary-list"></ul>
+                </div>
+
+                <!-- Part 2：已完成（默认折叠，点击可展开） -->
+                <details class="summary-part summary-part-done" id="done-part">
+                    <summary class="summary-part-head">
+                        <span class="summary-part-title">✅ 已完成</span>
+                        <span class="summary-part-count" id="summary-done-count">0</span>
+                        <span class="done-part-hint">点击展开 / 收起</span>
+                    </summary>
+                    <ul id="summary-list-done" class="summary-list"></ul>
+                </details>
+            </section>
+
+            <!-- 流程全景视图已隐藏（改为分批引导式待办） -->
+            <div class="view-divider hidden">
+                <span class="view-divider-line"></span>
+                <span class="view-divider-text">上面是「逐项办理」清单，下面是同一套流程的「整体全景」视图</span>
+                <span class="view-divider-line"></span>
+            </div>
+
+            <section class="lanes-card hidden">
+                <div class="lanes-head">
+                    <span class="section-badge">② 流程全景</span>
+                    <div class="lanes-title">准入流程全景</div>
+                    <div class="lanes-sub">和上面待办是<b>同一套流程</b>，这里从整体视角看每个步骤的全貌；点击节点可展开原文说明与链接。</div>
+                    <div class="lanes-legend" id="lanes-legend"></div>
+                </div>
+                <div id="lanes-area" class="lanes"></div>
+            </section>
+
+            <!-- 底部帮助入口：有问题可上妙问提问或到自建知识库查询 -->
+            <section class="help-card">
+                <div class="section-head">
+                    <span class="section-badge">② 帮助与支持</span>
+                    <div class="help-title">还有其他问题？</div>
+                    <div class="help-sub">若本指引未能覆盖您的疑问，可通过以下渠道进行咨询或查阅相关资料。</div>
+                </div>
+                <div class="help-links">
+                    <a class="help-link" href="https://miaowen.qq.com/" target="_blank" rel="noopener">
+                        <span class="help-link-icon">💬</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">妙问</div>
+                            <div class="help-link-desc">智能问答助手，直接提问即可获取答案</div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                    <a class="help-link" href="https://csig.lexiangla.com/spaces/5365255fd79044be9d61c3ba6b898c69?company_from=csig&amp;use_default_login=1" target="_blank" rel="noopener">
+                        <span class="help-link-icon">📚</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">知识库</div>
+                            <div class="help-link-desc">查询准入与服务商管理相关的完整资料文档</div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                    <a class="help-link" href="https://relay.zhixiao.qq.com/butler/" target="_blank" rel="noopener">
+                        <span class="help-link-icon">🗂️</span>
+                        <div class="help-link-text">
+                            <div class="help-link-title">一站式平台</div>
+                            <div class="help-link-desc">行业信息综合查询平台，支持行业政策、市场动态及相关业务资料的一站式检索。</div>
+                            <div class="help-link-cred">
+                                <span class="cred-item">登录账号 <code>K1-visitor</code></span>
+                                <span class="cred-item">登录密码 <code>Tencent@K1visitor</code></span>
+                            </div>
+                        </div>
+                        <span class="help-link-arrow">→</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- 详情弹窗 -->
+        <div id="detail-modal" class="modal hidden">
+            <div class="modal-mask"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <div id="detail-title" class="detail-title"></div>
+                        <div id="detail-tags" class="detail-tags"></div>
+                    </div>
+                    <div class="modal-close" id="detail-close">×</div>
+                </div>
+                <div id="detail-content" class="detail-content"></div>
+                <div class="modal-footer">
+                    <button id="btn-skip-step" class="ghost-btn hidden">标记为无需操作</button>
+                    <button id="btn-complete-step" class="primary-btn">已完成</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 判断选择弹窗 -->
+        <div id="decision-modal" class="modal hidden">
+            <div class="modal-mask"></div>
+            <div class="modal-body modal-body-narrow">
+                <div class="modal-header">
+                    <div>
+                        <div id="decision-title" class="detail-title"></div>
+                        <div class="detail-tags">
+                            <span class="tag-decision">判断 / 选择</span>
+                        </div>
+                    </div>
+                    <div class="modal-close" id="decision-close">×</div>
+                </div>
+                <div id="decision-prompt" class="detail-content"></div>
+                <div id="decision-choices" class="decision-choices"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js?v=20261008f"></script>
+    <script src="app.js?v=20261008f"></script>
+</body>
+</html>
